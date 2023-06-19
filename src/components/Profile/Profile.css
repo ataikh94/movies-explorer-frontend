@@ -1,0 +1,143 @@
+.profile {
+    height: 100vh;
+}
+
+.profile__title {
+    text-align: center;
+    margin: 71px 0 123px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+}
+
+.profile-form {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 410px;
+}
+
+.profile-form__element-group {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0 auto;
+    width: 410px;
+}
+
+.profile-form__element {
+    display: flex;
+    justify-content: space-between;
+    padding: 17px 0 18px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.profile-form__element:first-child {
+    padding-top: 0;
+}
+
+.profile-form__element:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.profile-form__input-title {
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-form__input {
+    text-align: right;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    border: none;
+    padding: 0;
+}
+
+.profile-form__input-error {
+    color: #EE3465;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    margin: 6px 0 0;
+    display: none;
+}
+
+.profile-form__submit-button {
+    margin: 218px 0 14px;
+    border: none;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+}
+
+.profile-form__submit-button:hover {
+    cursor: pointer;
+    opacity: .8;
+    transition: .3s ease-out;
+}
+
+.profile-form__signout {
+    border: none;
+    background-color: transparent;
+    margin: 0 0 70px;
+}
+
+.profile-form__signout:hover {
+    cursor: pointer;
+    opacity: .8;
+    transition: .3s ease-out;
+}
+
+.profile-form__signout_link {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #EE3465;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 900px) {
+    .profile__title {
+        margin: 227px 0 96px;
+    }
+
+    .profile-form__submit-button {
+        margin: 208px 0 14px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .profile__title {
+        margin: 61px 0 80px;
+    }
+
+    .profile-form {
+        width: 260px;
+    }
+
+    .profile-form__element-group {
+        width: 260px;
+    }
+
+    .profile-form__element {
+        padding: 18px 0 17px;
+    }
+
+    .profile-form__submit-button {
+        margin: 377px 0 11px;
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .profile-form__signout_link {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

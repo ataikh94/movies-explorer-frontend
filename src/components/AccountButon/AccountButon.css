@@ -1,0 +1,19 @@
+.account__button {
+    width: 100px;
+}
+
+.account__button:hover {
+    opacity: .8;
+    cursor: pointer;
+    transition: .3s ease-out;
+}
+
+@media screen and (max-width: 900px) {
+    .account__button {
+        display: none;
+    }
+}
+
+.account__button_opened {
+    display: block;
+}

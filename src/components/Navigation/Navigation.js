@@ -8,7 +8,7 @@ import AccountButon from '../AccountButon/AccountButon';
 
 export default function Navigation({ isAuthorized, isMenuOpened, handleClick, closeMenu }) {
   return (
-    <>
+    <div className='navigation'>
       <div className={`navigation__buttons-unauthorized ${isAuthorized ? '' : 'buttons-unauthorized_opened'}`}>
         <Link to='/signup' className='navigation__button navigation__buttons-signup'>Регистрация</Link>
         <Link to='/signin' className='navigation__button navigation__buttons-signin'>Войти</Link>
@@ -24,6 +24,6 @@ export default function Navigation({ isAuthorized, isMenuOpened, handleClick, cl
         </button>
         <Menu isOpened={isMenuOpened} closeMenu={closeMenu} />
       </div>
-    </>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-.navigation__buttons-unauthorized {
+.buttons-unauthorized {
     display: none;
     margin: 0;
 }
@@ -7,7 +7,7 @@
     display: block;
 }
 
-.navigation__buttons-authorized {
+.buttons-authorized {
     display: none;
 }
 

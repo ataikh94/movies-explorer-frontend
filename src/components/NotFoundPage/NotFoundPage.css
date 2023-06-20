@@ -32,6 +32,12 @@
     margin: 0;
 }
 
+.not-found-page__link:hover {
+    opacity: .7;
+    cursor: pointer;
+    transition: .3s ease-out;
+}
+
 @media screen and (max-width: 900px) {
     .not-found-page__title {
         margin-top: 409px;

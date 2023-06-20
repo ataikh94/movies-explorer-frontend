@@ -9,8 +9,8 @@ export default function SearchForm() {
         <form className='search-form'>
             <div className='search-form__group'>
                 <img src={searchIcon} alt='Иконка поиска' className='search-icon' />
-                <input className='search-form__input' placeholder='Фильм' />
-                <button className='search-button'><img src={searchButton} alt='Кнопка поиска' className='search-button_img' /></button>
+                <input className='search-form__input' placeholder='Фильм'minLength={2}/>
+                <button className='search-button'><img src={searchButton} alt='Кнопка поиска' className='search-button__img' /></button>
             </div>
             <FilterCheckbox />
         </form>

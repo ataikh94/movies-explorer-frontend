@@ -5,8 +5,7 @@ import SectionTitle from '../SectionTitle/SectionTitle';
 export default function AboutProject() {
     return (
         <>
-            <a name='about-project'></a>
-            <section className='about-project'>
+            <section className='about-project' id='about'>
                 <SectionTitle text='О проекте' />
                 <div className='about-project__description'>
                     <div className='description'>
@@ -19,8 +18,8 @@ export default function AboutProject() {
                     </div>
                 </div>
                 <div className='about-project__grid'>
-                    <span className='grid__label grid__label_green'>1 неделя</span>
-                    <span className='grid__label grid__label_gray'>4 недели</span>
+                    <span className='grid__label grid__label-green'>1 неделя</span>
+                    <span className='grid__label grid__label-gray'>4 недели</span>
                     <span className='grid__sign'>Back-end</span>
                     <span className='grid__sign'>Front-end</span>
                 </div>

@@ -68,6 +68,7 @@
 
     .student {
         grid-template-rows: auto minmax(30px, 42px);
+        grid-template-columns: minmax(100px, 601px) 255px;
     }
 
     .student__name {

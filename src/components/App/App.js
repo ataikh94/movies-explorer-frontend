@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path='/signin' element={<Login />} />
           <Route path='/signup' element={<Register />} />
-          <Route path='/movies' element={<Movies isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu}/>} />
+          <Route path='/movies' element={<Movies isAuthorized={true} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu}/>} />
           <Route path='/saved-movies' element={<SavedMovies isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu}/>} />
           <Route path='/profile' element={<Profile isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu}/>} />
           <Route path='/' element={<Main />} />

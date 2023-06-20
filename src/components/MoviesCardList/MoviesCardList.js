@@ -7,7 +7,7 @@ export default function MoviesCardList() {
     <div className='movies-card-list'>
       <span className='movies-card-list__no-data'>Ничего не найдено</span>
       <MoviesCard />
-      <button type='button' className='movies-card-list__button_else'>Ещё</button>
+      <button type='button' className='movies-card-list__button-else'>Ещё</button>
     </div>
   )
 }

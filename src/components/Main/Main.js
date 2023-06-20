@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Main.css';
 import Header from '../Header/Header';
 import Promo from '../Promo/Promo';
@@ -8,22 +7,21 @@ import Techs from '../Techs/Techs';
 import Footer from '../Footer/Footer';
 import AboutMe from '../AboutMe/AboutMe';
 import Portfolio from '../Portfolio/Portfolio';
-
+import Navigation from '../Navigation/Navigation';
 
 export default function Main() {
   return (
     <div className='main'>
       <Header>
-        <div className='header__buttons'>
-          <Link to='/signup' className='header__button header__buttons_signup'>Регистрация</Link>
-          <Link to='/signin' className='header__button header__buttons_signin'>Войти</Link>
-        </div>
+       <Navigation isAuthorized={false} />
       </Header>
-      <Promo />
-      <AboutProject />
-      <Techs />
-      <AboutMe />
-      <Portfolio />
+      <main>
+        <Promo />
+        <AboutProject />
+        <Techs />
+        <AboutMe />
+        <Portfolio />
+      </main>
       <Footer />
     </div>
   )

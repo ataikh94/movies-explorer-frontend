@@ -21,7 +21,7 @@ export default function Register() {
             handleSubmit={handleSubmit}>
             <label className='register-form__input-title' htmlFor='nameRegisterForm'>Имя</label>
             <input type='text'
-                className='register-form__input register-form__input_type_text'
+                className='register-form__input register-form__input-type_text'
                 name='name'
                 id='nameRegisterForm'
                 placeholder='Имя'

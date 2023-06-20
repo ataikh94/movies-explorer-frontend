@@ -1,6 +1,7 @@
 import React from 'react';
 import './Promo.css';
 import planet from '../../images/planet.svg';
+import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 export default function Promo() {
     return (
@@ -12,7 +13,7 @@ export default function Promo() {
                 </div>
                 <img src={planet} alt='Изображение планеты' className='promo__img' />
             </div>
-            <button className='promo__button' type='button'><a className='promo__button_link' href='#about-project'>Узнать больше</a></button>
+            <button className='promo__button' type='button'><AnchorLink className='promo__button-link' href='#about'>Узнать больше</AnchorLink></button>
         </section>
     )
 }

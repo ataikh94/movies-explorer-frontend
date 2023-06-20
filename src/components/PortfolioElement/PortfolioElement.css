@@ -18,18 +18,18 @@
     letter-spacing: -1.2px;
 }
 
-.portfolio-element_link {
+.portfolio-element__link {
     margin: 0;
 }
 
-.portfolio-element_img {
+.portfolio-element__img {
     margin: 0;
     width: 29px;
     height: 60px;
     margin: 15px 0 0;
 }
 
-.portfolio-element_img:hover {
+.portfolio-element__img:hover {
     cursor: pointer;
     opacity: .7;
     transition: .3s ease-out;
@@ -40,7 +40,7 @@
         font-size: 28px;
     }
 
-    .portfolio-element_img {
+    .portfolio-element__img {
         width: 27px;
     }
 }
@@ -52,7 +52,7 @@
         letter-spacing: -.7px;
     }
 
-    .portfolio-element_img {
+    .portfolio-element__img {
         width: 18px;
         height: 28px;
         margin: 2px 0 0;

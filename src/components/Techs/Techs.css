@@ -31,7 +31,7 @@
     padding: 0 0 100px;
 }
 
-.techs__list_elem {
+.techs__list-elem {
     list-style: none;
     font-weight: 400;
     font-size: 14px;
@@ -65,7 +65,7 @@
         padding: 0;
     }
 
-    .techs__list_elem {
+    .techs__list-elem {
         font-size: 12px;
         line-height: 15px;
         letter-spacing: -.8px;
@@ -99,7 +99,7 @@
         grid-template-columns: repeat(2, 84px);
     }
 
-    .techs__list_elem {
+    .techs__list-elem {
         letter-spacing: -.3px;
     }
 }

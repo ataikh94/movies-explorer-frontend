@@ -17,53 +17,13 @@
     transition: 0.3s;
 }
 
-.header__logo_link {
+.header__logo-link {
     cursor: auto;
 }
-
-.header__buttons {
-    margin: 0;
-}
-
-.header__button {
-    margin-left: 30px;
-    text-decoration: none;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 500;
-    color: white;
-}
-
-.header__button:first-child {
-    margin-left: 0;
-}
-
-.header__button:hover {
-    opacity: .7;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.header__buttons_signin {
-    color: black;
-    padding: 8px 20px;
-    box-sizing: border-box;
-    background-color: #2BE080;
-    border-radius: 3px;
-}
-
-.header__buttons_signin:hover {
-    opacity: .8;
-}
-
 
 @media screen and (max-width: 950px) {
     .header {
         padding: 18px 30px;
-    }
-
-    .header__buttons {
-        padding-bottom: 6px;
     }
 }
 
@@ -71,13 +31,8 @@
     .header {
         padding: 18px 14px;
     }
+}
 
-    .header__button {
-        font-size: 10px;
-        margin-left: 14px;
-    }
-
-    .header__buttons_signin {
-        padding: 7px 12px;
-    }
+.header-form {
+    padding: 0;
 }

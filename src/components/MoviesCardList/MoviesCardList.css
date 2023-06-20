@@ -16,7 +16,7 @@
     color: #E8E8E8;
 }
 
-.movies-card-list__button_else {
+.movies-card-list__button-else {
     font-weight: 500;
     font-size: 12px;
     line-height: 15px;
@@ -29,20 +29,20 @@
     margin: 57px 0 80px;
 }
 
-.movies-card-list__button_else:hover {
+.movies-card-list__button-else:hover {
     cursor: pointer;
     opacity: .8;
     transition: .3s ease-out;
 }
 
 @media screen and (max-width: 850px) {
-    .movies-card-list__button_else {
+    .movies-card-list__button-else {
         margin: 82px 0 87px;
     }
 }
 
 @media screen and (max-width: 550px) {
-    .movies-card-list__button_else {
+    .movies-card-list__button-else {
         margin: 68px 0 100px;
         width: 240px;
     }

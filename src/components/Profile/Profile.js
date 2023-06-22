@@ -1,31 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Profile.css';
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
 
-export default function Profile({ isMenuOpened, handleClick, closeMenu }) {
+export default function Profile({ name, email, isMenuOpened, handleClick, closeMenu, isLogged }) {
 
-  const user = {
-    name: 'Виталий',
-    email: 'pochta@yandex.ru'
-  }
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     console.log('Данные отредактированы');
   }
 
   const singOut = () => {
-    console.log('Пользователь вышел из профиля');
+    localStorage.removeItem('jwt');
+    navigate('/signin', true);
   }
 
   return (
     <>
       <Header>
-        <Navigation isAuthorized={true} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu} />
+        <Navigation isAuthorized={isLogged} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu} />
       </Header>
       <main className='profile'>
-        <h1 className='profile__title'>Привет, {user.name}!</h1>
+        <h1 className='profile__title'>Привет, {name}!</h1>
         <form name='profile-form'
           className='profile-form'
           onSubmit={handleSubmit}>
@@ -39,7 +37,7 @@ export default function Profile({ isMenuOpened, handleClick, closeMenu }) {
                 autoComplete='off'
                 minLength={2}
                 maxLength={30}
-                defaultValue='Виталий'
+                defaultValue={name}
                 required />
             </div>
             <span className='profile-form__input-error nameProfileForm-error'></span>
@@ -50,7 +48,7 @@ export default function Profile({ isMenuOpened, handleClick, closeMenu }) {
                 name='email'
                 id='emailProfileForm'
                 autoComplete='off'
-                defaultValue='pochta@yandex.ru'
+                defaultValue={email}
                 required />
             </div>
             <span className='profile-form__input-error emailProfileForm-error'></span>

@@ -1,0 +1,1 @@
+export const baseUrl = 'https://api.ataikh.movies.nomoredomains.rocks'

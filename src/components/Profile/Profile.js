@@ -9,7 +9,11 @@ import RegisterError from '../RegisterError/RegisterError';
 
 export default function Profile({ isMenuOpened, handleClick, closeMenu, isLogged, updateUser, text, errorDisplay, handleCloseErrorMessage, updateUserSuccess }) {
 
-  const { values, errors, isValid, handleChange, setValue, formRef } = useFormValidation();
+  const { values, errors, isValid, handleChange, setValue, setIsValid, formRef } = useFormValidation();
+
+  useEffect(() => {
+    setIsValid(true);
+  }, []);
 
   const errorClassName = (name) => `profile-form__input-error ${errors[name] ? 'profile-form__input-error_active' : ''}`
 
@@ -44,7 +48,6 @@ export default function Profile({ isMenuOpened, handleClick, closeMenu, isLogged
         <h1 className='profile__title'>Привет, {values['name']}!</h1>
         <form name='profile-form'
           className='profile-form'
-          ref={formRef}
           onSubmit={handleSubmit}>
           <div className='profile-form__element-group'>
             <div className='profile-form__element'>

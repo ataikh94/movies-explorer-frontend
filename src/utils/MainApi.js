@@ -40,3 +40,16 @@ export const checkToken = (token) => {
             return Promise.reject(res)
         });
 };
+
+// Запрос на обновлениеданных пользователя
+export const updateUser = (name, email) => {
+    return fetch(`${baseUrl}/users/me`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email })
+    })
+    .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+};

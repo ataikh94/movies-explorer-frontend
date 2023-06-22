@@ -11,7 +11,7 @@ export default function Login({ handleLogin, text, errorDisplay, closeError }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const { email, password } = values;
-        handleLogin(email, password);
+        handleLogin(email, password)
     }
 
     const errorClassName = (name) => `register-form__input-error ${errors[name] ? 'register-form__input-error_active' : ''}`

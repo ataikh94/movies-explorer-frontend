@@ -38,3 +38,7 @@
     line-height: 15px;
     margin: 0;
 }
+
+.error-register__message_success {
+    color: rgb(43,224,128);
+}

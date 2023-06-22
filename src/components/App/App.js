@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Main from '../Main/Main';
@@ -12,6 +12,7 @@ import * as mainApi from '../../utils/MainApi';
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 import { userContext } from '../../context/userContext';
 
+
 function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [userData, setUserData] = useState({
@@ -22,6 +23,7 @@ function App() {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [errorDisplay, setErrorDisplay] = useState(false);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,7 +47,9 @@ function App() {
     setErrorDisplay(true);
     setTimeout(() => {
       setErrorDisplay(false);
-    }, 3000);
+      setErrorMessage(false);
+      setUpdateUserSuccess(false);
+    }, 2000);
   }
 
   const handleRegister = (name, email, password) => {
@@ -59,36 +63,54 @@ function App() {
   }
 
   const handleLogin = (email, password) => {
-     mainApi.authorize(email, password)
+    mainApi.authorize(email, password)
       .then(res => {
         if (res.token) {
           localStorage.setItem('jwt', res.token);
-          navigate('/movies', true)
           setIsLogged(true);
           const { name, email, _id } = res.userObj;
-          setUserData({ name, email, id: _id })
+          setUserData({ name, email, _id });
+          navigate('/movies', true);
         }
       })
       .catch(err => {
         displayErrorMessage(err);
-      })
+      });
   }
 
-  React.useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
+  useEffect(() => {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      if (!jwt) return;
       mainApi.checkToken(jwt)
-      .then((res) => {
-        if (res) {
-          setUserData(res);
-          setIsLogged(true);
-          const url = location.pathname || '/movies'
-          navigate(url)
-        }
-      })
-        .catch(err => console.log(err));
+        .then(res => {
+          if (res) {
+            setIsLogged(true);
+            const { name, email, _id } = res;
+            setUserData({ name, email, _id });
+            const url = location.pathname || '/movies';
+            navigate(url, true);
+          }
+        })
     }
-  }, [])
+  }, []);
+
+  const updateUser = (name, email) => {
+    mainApi.updateUser(name, email)
+      .then(res => {
+        setErrorMessage('Данные изменены');
+        setErrorDisplay(true);
+        setUpdateUserSuccess(true);
+        setTimeout(() => {
+          setErrorDisplay(false);
+          setErrorMessage(false);
+          setUpdateUserSuccess(false);
+        }, 2000);
+      })
+      .catch(err => {
+        displayErrorMessage(err);
+      });
+  }
 
   return (
     <div className='app'>
@@ -124,8 +146,11 @@ function App() {
                 handleClick={handleClick}
                 closeMenu={closeMenu}
                 isLogged={isLogged}
-                name={userData.name}
-                email={userData.email}
+                updateUser={updateUser}
+                text={errorMessage}
+                errorDisplay={errorDisplay}
+                closeError={handleCloseErrorMessage}
+                updateUserSuccess={updateUserSuccess}
               />
             } />
             <Route path='*' element={<NotFoundPage />} />

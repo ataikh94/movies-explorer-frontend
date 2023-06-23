@@ -5,11 +5,7 @@
 }
 
 .movies-card-list__no-data {
-    display: none;
-}
-
-.movies-card-list__no-data_active {
-    margin: 0 auto;
+    margin: 0 auto 30px;
     font-weight: 500;
     font-size: 12px;
     line-height: 15px;
@@ -26,13 +22,17 @@
     border-radius: 5px;
     width: 320px;
     align-self: center;
-    margin: 57px 0 80px;
+    margin: 0 0 80px;
 }
 
 .movies-card-list__button-else:hover {
     cursor: pointer;
     opacity: .8;
     transition: .3s ease-out;
+}
+
+.movies-card-list__button-else_hidden {
+    display: none;
 }
 
 @media screen and (max-width: 850px) {

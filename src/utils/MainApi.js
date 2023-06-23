@@ -41,7 +41,7 @@ export const checkToken = (token) => {
         });
 };
 
-// Запрос на обновлениеданных пользователя
+// Запрос на обновление данных пользователя
 export const updateUser = (name, email) => {
     return fetch(`${baseUrl}/users/me`, {
         method: 'PATCH',

@@ -6,16 +6,17 @@ import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-export default function Movies({ isAuthorized, isMenuOpened, handleClick, closeMenu }) {
+export default function Movies({ isAuthorized, isMenuOpened, handleClick, closeMenu, movies, handleChecked,
+   isChecked, filterMovies, filterMoviesSubmite, isMoviesFound }) {
   return (
     <>
       <Header>
         <Navigation isAuthorized={isAuthorized} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu} />
       </Header>
-      <main>
-        <SearchForm />
+      <main className='movies'>
+        <SearchForm handleChecked={handleChecked} filterMovies={filterMovies} filterMoviesSubmite={filterMoviesSubmite}/>
         <Preloader />
-        <MoviesCardList />
+        <MoviesCardList movies={movies} isChecked={isChecked} isMoviesFound={isMoviesFound} />
       </main>
       <Footer />
     </>

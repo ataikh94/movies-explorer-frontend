@@ -11,7 +11,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import * as mainApi from '../../utils/MainApi';
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 import { userContext } from '../../context/userContext';
-
+import * as movieApi from '../../utils/MoviesApi';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false);
@@ -24,12 +24,21 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(false);
+  const [movies, setMovies] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [keyWord, setKeyWord] = useState('');
+  const [allFindMovies, setAllFindMovies] = useState([]);
+  const [isMoviesFound, setIsMoviesFound] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleClick = () => {
     setIsMenuOpened(true);
+  }
+
+  const handleChecked = () => {
+    setIsChecked(!isChecked);
   }
 
   const closeMenu = () => {
@@ -40,6 +49,33 @@ function App() {
     setErrorDisplay(false);
     setErrorMessage('');
   }
+
+  const filterMoviesChange = (e) => {
+    setKeyWord(e.target.value.toLowerCase());
+  }
+
+  const filterMoviesSubmite = (e) => {
+    e.preventDefault();
+    setAllFindMovies([]);
+    setIsMoviesFound(false);
+    if (keyWord === '') {
+      setIsMoviesFound(false);
+      setAllFindMovies([]);
+      return;
+    }
+    const findNameRu = movies.filter(elem => (elem.nameRU).toLowerCase().includes(keyWord))
+    const findNameEn = movies.filter(elem => (elem.nameEN).toLowerCase().includes(keyWord))
+    const allMovies = [...new Set([...findNameRu, ...findNameEn])]
+
+    if (allMovies.length > 0) {
+      setIsMoviesFound(true);
+      setAllFindMovies(allMovies);
+    }
+  }
+
+  useEffect(() => {
+    setIsMoviesFound(false);
+  }, [])
 
   const displayErrorMessage = (err) => {
     const message = JSON.stringify(err.message).replace(/["']+/g, '')
@@ -112,6 +148,14 @@ function App() {
       });
   }
 
+  useEffect(() => {
+    movieApi.arrayMovies()
+      .then(data => {
+        setMovies(data);
+      })
+      .catch(err => console.log(err))
+  }, [isLogged])
+
   return (
     <div className='app'>
       <div className='app__container'>
@@ -128,6 +172,12 @@ function App() {
                 isMenuOpened={isMenuOpened}
                 handleClick={handleClick}
                 closeMenu={closeMenu}
+                movies={isMoviesFound ? allFindMovies : []}
+                handleChecked={handleChecked}
+                isChecked={isChecked}
+                filterMovies={filterMoviesChange}
+                filterMoviesSubmite={filterMoviesSubmite}
+                isMoviesFound={isMoviesFound}
               />
             } />
             <Route path='/saved-movies' element={

@@ -1,66 +1,22 @@
 import React from 'react';
 import './MoviesCard.css';
-import movie1 from '../../images/movie-1.png';
+import { Link } from 'react-router-dom';
+import { movieApi } from '../../utils/constants';
 
-export default function MoviesCard({ removeButton }) {
+export default function MoviesCard({ movie, removeButton }) {
+    const durationHours =  Math.floor(movie.duration / 60) > 0 ? (Math.floor(movie.duration / 60) + 'ч ') : '';
+    const durationMinuts =  (movie.duration % 60) > 0 ? (movie.duration % 60 + 'м') : '';
+    const duratuinString = durationHours + durationMinuts;
     return (
-        <div className='movies-list'>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>33 слова о дизайне</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
+        <div className='movie'>
+            <div className='movie__info'>
+                <h3 className='movie__title'>{movie.nameRU}</h3>
+                <span className='movie__duration'>{duratuinString}</span>
+                <button className={`button__dislike ${removeButton ? 'button__delete' : ''}`} />
             </div>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>33 слова о дизайне</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
-            </div>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>В погоне за Бенкси</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like button__dislike ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
-            </div>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>В погоне за Бенкси</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like button__dislike ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
-            </div>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>Бег это свобода</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
-            </div>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>Книготорговцы</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like button__dislike ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
-            </div>
-            <div className='movie'>
-                <div className='movie__info'>
-                    <h3 className='movie__title'>Когда я думаю о Германии ночью</h3>
-                    <span className='movie__duration'>1ч 42м</span>
-                    <button className={`button__like button__dislike ${removeButton ? 'button__delete' : ''}`} />
-                </div>
-                <img src={movie1} alt='Изображение к фильму' className='movie__image' />
-            </div>
+            <Link to={movie.trailerLink} target='_blank'>
+                <img src={`${movieApi}/${movie.image.url}`} alt={movie.nameRU} className='movie__image' />
+            </Link>
         </div>
     )
 }

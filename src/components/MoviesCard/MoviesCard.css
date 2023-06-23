@@ -1,16 +1,16 @@
 .movie {
     background-color: #F9F9F9;
-    margin: 40px 70px;
+    margin: 37px 70px 0;
     display: flex;
     justify-content: space-between;
 }
 
-.movie:first-child {
+.movie:first-of-type {
     margin-top: 70px;
 }
 
-.movie:last-child {
-    margin-bottom: 0;
+.movie:last-of-type {
+    margin-bottom: 57px;
 }
 
 .movie__info {
@@ -35,6 +35,22 @@
     margin: 13px 0 30px;
 }
 
+.button__dislike {
+    background-image: url('../../images/noneLike.svg');
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 14px;
+    height: 12px;
+}
+
+.button__dislike:hover {
+    cursor: pointer;
+    opacity: .8;
+    transition: .3s ease-out;
+}
+
+
 .button__like {
     border: none;
     background-color: transparent;
@@ -42,16 +58,6 @@
     background-repeat: no-repeat;
     width: 14px;
     height: 12px;
-}
-
-.button__like:hover {
-    cursor: pointer;
-    opacity: .8;
-    transition: .3s ease-out;
-}
-
-.button__dislike {
-    background-image: url('../../images/noneLike.svg');
 }
 
 .button__delete {
@@ -62,6 +68,12 @@
     width: 220px;
     height: 122px;
     margin: 6px;
+}
+
+.movie__image:hover {
+    cursor: pointer;
+    opacity: .7;
+    transition: .3s ease-out;
 }
 
 @media screen and (max-width: 850px) {

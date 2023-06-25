@@ -42,3 +42,8 @@
 .error-register__message_success {
     color: rgb(43,224,128);
 }
+
+.error-register__message_server-crashed {
+    position: relative;
+    bottom: -15px;
+}

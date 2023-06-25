@@ -11,75 +11,142 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import * as mainApi from '../../utils/MainApi';
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 import { userContext } from '../../context/userContext';
-import * as movieApi from '../../utils/MoviesApi';
+import * as moviesApi from '../../utils/MoviesApi';
+import Header from '../Header/Header';
+import { useLocalStorage } from '../../utils/useLocalStorage';
+import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
 
 function App() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(false); // состояние авторизации пользователя
   const [userData, setUserData] = useState({
     _id: '',
     name: '',
     email: ''
-  });
-  const [isMenuOpened, setIsMenuOpened] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [errorDisplay, setErrorDisplay] = useState(false);
-  const [updateUserSuccess, setUpdateUserSuccess] = useState(false);
-  const [movies, setMovies] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
-  const [keyWord, setKeyWord] = useState('');
-  const [allFindMovies, setAllFindMovies] = useState([]);
-  const [isMoviesFound, setIsMoviesFound] = useState(false);
+  }); // состояние данных текущего пользователя
+  const [isMenuOpened, setIsMenuOpened] = useState(false); // состояние бургер-меню
+  const [errorMessage, setErrorMessage] = useState(''); // текст сообщения об ошибке при получении данных из API
+  const [errorDisplay, setErrorDisplay] = useState(false); // состояние отображения ошибки при получении данных из API
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(false); // состояние успешного обновления данных пользователя для дополнительного класса
+  const [movies, setMovies] = useLocalStorage('allMovies', []); // состояние массива фильмов, полученных из API
+  const [allFindMovies, setAllFindMovies] = useLocalStorage('movies', []); // состояние массива фильмов, найденных с учетом фильтров
+  const [moviesByKey, setMoviesByKey] = useLocalStorage('movies-by-key', allFindMovies); //состояние массива фильмов, найденных с учетом ключевого слова
+  const [isChecked, setIsChecked] = useLocalStorage('checked', false); // состояние фильтра-чекбокса
+  const [keyWord, setKeyWord] = useLocalStorage('keyword', ''); // состояние ключевого слова
+  const [isLoaderOpened, setIsLoaderOpened] = useState(false); // состояние лоадера
+  const [isEmpty, setIsEmpty] = useState(false); // состояние пустоты строки поиска
+  const [isLiked, setIsLiked] = useState(false); // состояние лайка
 
+  const [isMoviesFound, setIsMoviesFound] = useLocalStorage('movies-found', true); // состояние найденности фильмов
+  const [isServerCrash, setIsServerCrash] = useState(false); // состояние для ошибки сервера
+  
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Функция открытия бургер-меню
   const handleClick = () => {
     setIsMenuOpened(true);
   }
 
-  const handleChecked = () => {
-    setIsChecked(!isChecked);
-  }
-
+  // Функция закрытия бургер-меню
   const closeMenu = () => {
     setIsMenuOpened(false);
   }
 
-  function handleCloseErrorMessage() {
-    setErrorDisplay(false);
-    setErrorMessage('');
+  // Функция изменения чекбокса
+  const handleChecked = () => {
+    setIsChecked(!isChecked);
   }
 
+  // Функция постановки лайка
+  const handleLike = () => {
+      setIsLiked(!isLiked);
+/*     mainApi.likeMovie(movie)
+      .then(res => console.log(res)) */
+  }
+
+  // Функция изменения поля поиска фильмов
   const filterMoviesChange = (e) => {
     setKeyWord(e.target.value.toLowerCase());
+    if (e.target.value === '') {
+      setIsEmpty(true);
+      setIsMoviesFound(false);
+    }
+    setIsEmpty(false);
   }
 
+  // Функция сабмита поля поиска фильмов
   const filterMoviesSubmite = (e) => {
     e.preventDefault();
-    setAllFindMovies([]);
-    setIsMoviesFound(false);
     if (keyWord === '') {
-      setIsMoviesFound(false);
+      setIsEmpty(true);
+      setMovies([]);
       setAllFindMovies([]);
+      setMoviesByKey([]);
       return;
     }
-    const findNameRu = movies.filter(elem => (elem.nameRU).toLowerCase().includes(keyWord))
-    const findNameEn = movies.filter(elem => (elem.nameEN).toLowerCase().includes(keyWord))
-    const allMovies = [...new Set([...findNameRu, ...findNameEn])]
-
-    if (allMovies.length > 0) {
-      setIsMoviesFound(true);
-      setAllFindMovies(allMovies);
-    }
+    setIsLoaderOpened(true);
+    moviesApi.arrayMovies()
+      .then(data => {
+        setMovies(data);
+        setIsLoaderOpened(false);
+      })
+      .catch(err => {
+        setIsLoaderOpened(false);
+        setIsMoviesFound(false);
+        setIsServerCrash(true);
+        displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
+      });
   }
 
+  // Эффект при изменении ключевого слова
   useEffect(() => {
-    setIsMoviesFound(false);
+    if (keyWord === '') {
+      setMovies([]);
+      setAllFindMovies([]);
+      setMoviesByKey([]);
+      setIsMoviesFound(false);
+      return;
+    }
+    setIsEmpty(false);
+  }, [keyWord])
+
+  // Эффект - фильтрация данных при получении списка фильмов
+  useEffect(() => {
+    const movieKeyWordArray = filterKeyWord(movies, keyWord);
+    if (movieKeyWordArray.length === 0) {
+      setAllFindMovies([]);
+     return setIsMoviesFound(false);
+    }
+    setIsMoviesFound(true);
+    setAllFindMovies(movieKeyWordArray);
+    setMoviesByKey(movieKeyWordArray);
+    const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isChecked);
+    if (movieCheckboxArray.length > 0) {
+      setAllFindMovies(movieCheckboxArray);
+      setIsMoviesFound(true);
+    }
+    else {
+      setAllFindMovies([]);
+      setIsMoviesFound(false);
+    }
+  }, [movies, isChecked])
+
+  useEffect(() => {
+    const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
+    if (movieCheckboxArray.length > 0) {
+      setAllFindMovies(movieCheckboxArray);
+    }
   }, [])
 
-  const displayErrorMessage = (err) => {
-    const message = JSON.stringify(err.message).replace(/["']+/g, '')
-    setErrorMessage(message);
+  // Функция отображения сообщения об ошибке, полученной при запросе к API
+  const displayErrorMessage = (err, msg) => {
+    console.log(msg);
+    if (!msg) {
+      const message = JSON.stringify(err.message).replace(/["']+/g, '')
+      setErrorMessage(message);
+    } else {
+      setErrorMessage(msg);
+    }
     setErrorDisplay(true);
     setTimeout(() => {
       setErrorDisplay(false);
@@ -88,6 +155,7 @@ function App() {
     }, 2000);
   }
 
+  // Функция регистрации
   const handleRegister = (name, email, password) => {
     mainApi.register(name, email, password)
       .then(res => {
@@ -98,6 +166,7 @@ function App() {
       });
   }
 
+  // Функция авторизации
   const handleLogin = (email, password) => {
     mainApi.authorize(email, password)
       .then(res => {
@@ -114,6 +183,7 @@ function App() {
       });
   }
 
+  // Эффект при монтировании - проверка JWT-токена
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
@@ -131,6 +201,7 @@ function App() {
     }
   }, []);
 
+  // Функция обновления данных пользователя через профиль
   const updateUser = (name, email) => {
     mainApi.updateUser(name, email)
       .then(res => {
@@ -148,60 +219,96 @@ function App() {
       });
   }
 
-  useEffect(() => {
-    movieApi.arrayMovies()
-      .then(data => {
-        setMovies(data);
-      })
-      .catch(err => console.log(err))
-  }, [isLogged])
-
   return (
     <div className='app'>
       <div className='app__container'>
         <userContext.Provider value={userData}>
           <Routes>
-            <Route path='/' element={<Main />} />
-            <Route path='/signin' element={<Login handleLogin={handleLogin} text={errorMessage} errorDisplay={errorDisplay} closeError={handleCloseErrorMessage} />} />
-            <Route path='/signup' element={<Register handleRegister={handleRegister} text={errorMessage} errorDisplay={errorDisplay} closeError={handleCloseErrorMessage} />} />
+            <Route path='/signin'
+              element={<Login
+                handleLogin={handleLogin}
+                text={errorMessage}
+                errorDisplay={errorDisplay} />} />
+            <Route path='/signup'
+              element={<Register
+                handleRegister={handleRegister}
+                text={errorMessage}
+                errorDisplay={errorDisplay} />} />
+            <Route path='/' element={
+              <>
+                <Header
+                  isLogged={isLogged}
+                  isMenuOpened={isMenuOpened}
+                  handleClick={handleClick}
+                  closeMenu={closeMenu} />
+                <Main />
+              </>} />
             <Route path='/movies' element={
-              <ProtectedRouteElement
-                element={Movies}
-                isLogged={isLogged}
-                isAuthorized={true}
-                isMenuOpened={isMenuOpened}
-                handleClick={handleClick}
-                closeMenu={closeMenu}
-                movies={isMoviesFound ? allFindMovies : []}
-                handleChecked={handleChecked}
-                isChecked={isChecked}
-                filterMovies={filterMoviesChange}
-                filterMoviesSubmite={filterMoviesSubmite}
-                isMoviesFound={isMoviesFound}
-              />
+              <>
+                <Header
+                  isLogged={isLogged}
+                  isMenuOpened={isMenuOpened}
+                  handleClick={handleClick}
+                  closeMenu={closeMenu} />
+                <ProtectedRouteElement
+                  element={Movies}
+                  isLogged={isLogged}
+                  movies={allFindMovies}
+                  handleChecked={handleChecked}
+                  isChecked={isChecked}
+                  filterMovies={filterMoviesChange}
+                  filterMoviesSubmite={filterMoviesSubmite}
+                  isMoviesFound={isMoviesFound}
+                  isLoaderOpened={isLoaderOpened}
+                  keyWord={keyWord}
+                  isEmpty={isEmpty}
+                  handleLike={handleLike}
+                  isLiked={isLiked}
+                  text={errorMessage}
+                  errorDisplay={errorDisplay}
+                  isServerCrash={isServerCrash}
+                />
+              </>
             } />
             <Route path='/saved-movies' element={
-              <ProtectedRouteElement
-                element={SavedMovies}
-                isMenuOpened={isMenuOpened}
-                handleClick={handleClick}
-                closeMenu={closeMenu}
-                isLogged={isLogged}
-              />
+              <>
+                <Header
+                  isLogged={isLogged}
+                  isMenuOpened={isMenuOpened}
+                  handleClick={handleClick}
+                  closeMenu={closeMenu} />
+                <ProtectedRouteElement
+                  element={SavedMovies}
+                  isMenuOpened={isMenuOpened}
+                  handleClick={handleClick}
+                  closeMenu={closeMenu}
+                  isLogged={isLogged}
+                  isLiked={isLiked}
+                  isChecked={isChecked}
+                  setIsMoviesFound={setIsMoviesFound}
+                />
+              </>
             } />
             <Route path='/profile' element={
-              <ProtectedRouteElement
-                element={Profile}
-                isMenuOpened={isMenuOpened}
-                handleClick={handleClick}
-                closeMenu={closeMenu}
-                isLogged={isLogged}
-                updateUser={updateUser}
-                text={errorMessage}
-                errorDisplay={errorDisplay}
-                closeError={handleCloseErrorMessage}
-                updateUserSuccess={updateUserSuccess}
-              />
+              <>
+                <Header
+                  isLogged={isLogged}
+                  isMenuOpened={isMenuOpened}
+                  handleClick={handleClick}
+                  closeMenu={closeMenu} />
+                <ProtectedRouteElement
+                  element={Profile}
+                  isMenuOpened={isMenuOpened}
+                  handleClick={handleClick}
+                  closeMenu={closeMenu}
+                  isLogged={isLogged}
+                  updateUser={updateUser}
+                  text={errorMessage}
+                  errorDisplay={errorDisplay}
+                  updateUserSuccess={updateUserSuccess}
+                  setIsLogged={setIsLogged}
+                />
+              </>
             } />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>

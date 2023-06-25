@@ -53,3 +53,28 @@ export const updateUser = (name, email) => {
     })
     .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
 };
+
+// Запрос на лайк фильма
+export const likeMovie = (movie) => {
+    return fetch(`${baseUrl}/movies`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movie)
+    })
+    .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+};
+
+// Запрос на список сохраненных фильмов
+export const getMovies = () => {
+    return fetch(`${baseUrl}/movies`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+};

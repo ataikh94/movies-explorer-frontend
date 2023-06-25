@@ -1,22 +1,53 @@
 import React from 'react';
-import Header from '../Header/Header';
-import Navigation from '../Navigation/Navigation';
+import './Movies.css';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import RegisterError from '../RegisterError/RegisterError';
 
-export default function Movies({ isAuthorized, isMenuOpened, handleClick, closeMenu, movies, handleChecked,
-   isChecked, filterMovies, filterMoviesSubmite, isMoviesFound }) {
+export default function Movies({
+  movies,
+  handleChecked,
+  keyWord,
+  isEmpty,
+  isLoaderOpened,
+  text,
+  errorDisplay,
+  isServerCrash,
+  isChecked,
+  filterMovies,
+  filterMoviesSubmite,
+  isMoviesFound,
+  setIsMoviesFound,
+  handleLike,
+  isLiked,
+}) {
   return (
     <>
-      <Header>
-        <Navigation isAuthorized={isAuthorized} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu} />
-      </Header>
       <main className='movies'>
-        <SearchForm handleChecked={handleChecked} filterMovies={filterMovies} filterMoviesSubmite={filterMoviesSubmite}/>
-        <Preloader />
-        <MoviesCardList movies={movies} isChecked={isChecked} isMoviesFound={isMoviesFound} />
+        <SearchForm
+          keyWord={keyWord}
+          isEmpty={isEmpty}
+          handleChecked={handleChecked}
+          isChecked={isChecked}
+          filterMovies={filterMovies}
+          filterMoviesSubmite={filterMoviesSubmite} />
+        {isLoaderOpened ?
+          <Preloader isLoaderOpened={isLoaderOpened} /> :
+          errorDisplay ?
+            <RegisterError
+              text={text}
+              errorDisplay={errorDisplay}
+              isServerCrash={isServerCrash} /> :
+            <MoviesCardList
+              movies={movies}
+              isLiked={isLiked}
+              handleLike={handleLike}
+              isChecked={isChecked}
+              isMoviesFound={isMoviesFound}
+              setIsMoviesFound={setIsMoviesFound} />
+        }
       </main>
       <Footer />
     </>

@@ -6,6 +6,10 @@
     padding: 18px 70px;
 }
 
+.header-main {
+    background-color: #465DFF;
+}
+
 .header__logo {
     width: 38px;
     margin: 0;

@@ -16,7 +16,7 @@ export default function Menu({ isOpened, closeMenu }) {
                     <p className='menu__element'><Link to='/movies' className='menu__element-link' onClick={closeMenu}>Фильмы</Link></p>
                     <p className='menu__element'><Link to='/saved-movies' className='menu__element-link' onClick={closeMenu}>Сохранённые фильмы</Link></p>
                 </nav>
-                <AccountButon classStyle='account__button-opened' onClick={closeMenu} />
+                <AccountButon classStyle='account__button-opened' closeMenu={closeMenu} />
             </div>
         </div>
     )

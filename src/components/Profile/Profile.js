@@ -1,15 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Profile.css';
-import Header from '../Header/Header';
-import Navigation from '../Navigation/Navigation';
 import { userContext } from '../../context/userContext';
 import { useFormValidation } from '../../utils/useFormValidation';
 import RegisterError from '../RegisterError/RegisterError';
 
-export default function Profile({ isMenuOpened, handleClick, closeMenu, isLogged, updateUser, text, errorDisplay, handleCloseErrorMessage, updateUserSuccess }) {
+export default function Profile({ updateUser, text, errorDisplay, handleCloseErrorMessage, updateUserSuccess, setIsLogged }) {
 
-  const { values, errors, isValid, handleChange, setValue, setIsValid, formRef } = useFormValidation();
+  const { values, errors, isValid, handleChange, setValue, setIsValid } = useFormValidation();
 
   useEffect(() => {
     setIsValid(true);
@@ -36,14 +34,12 @@ export default function Profile({ isMenuOpened, handleClick, closeMenu, isLogged
 
   const singOut = () => {
     localStorage.removeItem('jwt');
-    navigate('/signin', true);
+    setIsLogged(false);
+    navigate('/', true);
   }
 
   return (
     <>
-      <Header>
-        <Navigation isAuthorized={isLogged} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu} />
-      </Header>
       <main className='profile'>
         <h1 className='profile__title'>Привет, {values['name']}!</h1>
         <form name='profile-form'
@@ -87,7 +83,7 @@ export default function Profile({ isMenuOpened, handleClick, closeMenu, isLogged
           </button>
         </form>
       </main>
-      <RegisterError text={text} errorDisplay={errorDisplay} closeError={handleCloseErrorMessage} updateUserSuccess={updateUserSuccess}/>
+      <RegisterError text={text} errorDisplay={errorDisplay} updateUserSuccess={updateUserSuccess}/>
     </>
   )
 }

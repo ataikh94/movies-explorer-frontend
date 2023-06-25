@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { useLocation } from 'react-router-dom';
+import { movieApi } from '../../utils/constants';
 
 export default function MoviesCardList({
   movies,
@@ -13,11 +13,19 @@ export default function MoviesCardList({
   const [isHidden, setIsHidden] = useState(false); // состояние кнопки "Ещё"
   const [countVisibleItems, setCountVisibleItems] = useState(7); // первоначальное количество отображаемых элементов
   const visibleItems = movies.slice(0, countVisibleItems); // массив элементов с учётом ограничения
-  console.log(movies)
+
   // Функция клика по кнопке "Ещё"
   const handleClick = () => {
-    setCountVisibleItems(countVisibleItems + 7);
+    window.innerWidth <= 550 ?
+      setCountVisibleItems(countVisibleItems + 5) :
+      setCountVisibleItems(countVisibleItems + 7);
   }
+
+  const windowSizeControl = () => {
+    window.innerWidth <= 550 ? setCountVisibleItems(5) : setCountVisibleItems(7);
+  }
+
+  window.onresize = windowSizeControl;
 
   // Эффект при изменении чекбокса - устанавливать первоначальное количество отображаемых записей
   useEffect(() => {
@@ -40,7 +48,7 @@ export default function MoviesCardList({
           {visibleItems.map(elem => {
             return <MoviesCard
               movie={elem}
-              key={elem.id}
+              key={elem.movieId}
               handleLike={handleLike}
               isLiked={isLiked} />
           })}

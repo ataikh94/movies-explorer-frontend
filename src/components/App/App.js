@@ -15,6 +15,7 @@ import * as moviesApi from '../../utils/MoviesApi';
 import Header from '../Header/Header';
 import { useLocalStorage } from '../../utils/useLocalStorage';
 import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
+import { movieApi } from '../../utils/constants';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false); // состояние авторизации пользователя
@@ -69,10 +70,10 @@ function App() {
   }
 
   // Функция постановки лайка
-  const handleLike = () => {
+  const handleLike = (movie) => {
     setIsLiked(!isLiked);
-    /*     mainApi.likeMovie(movie)
-          .then(res => console.log(res)) */
+     mainApi.likeMovie(movie)
+          .then(res => console.log(res))
   }
 
   // Функция изменения поля поиска фильмов
@@ -91,7 +92,6 @@ function App() {
 
   // Функция сабмита поля поиска фильмов
   const filterMoviesSubmite = (e) => {
-    console.log('сабмит')
     e.preventDefault();
     if (location.pathname === '/movies') {
       if (keyWord === '') {
@@ -104,6 +104,19 @@ function App() {
       setIsLoaderOpened(true);
       moviesApi.arrayMovies()
         .then(data => {
+          const updatedArray = data.map(object => {
+            const movieObject = Object.assign({}, object, { image: `${movieApi}${object.image.url}` },
+             { thumbnail: `${movieApi}${object.image.formats.thumbnail.url}` },
+             { movieId: object.id });
+            delete movieObject.created_at
+            delete movieObject.id;
+            delete movieObject.updated_at;
+            return movieObject;
+          })
+          return updatedArray;
+        })
+        .then(data => {
+          console.log(data)
           setMovies(data);
           setIsLoaderOpened(false);
         })
@@ -148,7 +161,6 @@ function App() {
 
   // Эффект - фильтрация данных при получении списка фильмов
   useEffect(() => {
-    console.log('изменился сеч')
     if (location.pathname === '/movies') {
       const movieKeyWordArray = filterKeyWord(movies, keyWord);
       if (movieKeyWordArray.length === 0) {
@@ -169,18 +181,15 @@ function App() {
       }
     }
     if (location.pathname === '/saved-movies') {
-      console.log(keyWordSave)
       const movieKeyWordArray = filterKeyWord(saveMovies, keyWordSave);
       if (movieKeyWordArray.length === 0) {
         setAllFindMoviesSave([]);
         //setIsMoviesFoundSave(false);
       }
-      console.log(movieKeyWordArray);
       setIsMoviesFoundSave(true);
       setAllFindMoviesSave(movieKeyWordArray);
       setMoviesByKeySave(movieKeyWordArray);
       const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isCheckedSave);
-      console.log(movieCheckboxArray)
       if (movieCheckboxArray.length > 0) {
         setAllFindMoviesSave(movieCheckboxArray);
         setIsMoviesFoundSave(true);
@@ -209,7 +218,6 @@ function App() {
 
   // Функция отображения сообщения об ошибке, полученной при запросе к API
   const displayErrorMessage = (err, msg) => {
-    console.log(msg);
     if (!msg) {
       const message = JSON.stringify(err.message).replace(/["']+/g, '')
       setErrorMessage(message);

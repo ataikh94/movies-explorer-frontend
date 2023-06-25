@@ -34,8 +34,8 @@ export default function MoviesCardList({
 
   return (
     <div className='movies-card-list'>
-   {/*    {!isMoviesFound ?
-        <span className='movies-card-list__no-data'>Ничего не найдено</span> : */}
+      {!isMoviesFound ?
+        <span className='movies-card-list__no-data'>Ничего не найдено</span> :
         <>
           {visibleItems.map(elem => {
             return <MoviesCard
@@ -50,7 +50,7 @@ export default function MoviesCardList({
             Ещё
           </button>
         </>
-   {/*    } */}
+      }
     </div >
   )
 }

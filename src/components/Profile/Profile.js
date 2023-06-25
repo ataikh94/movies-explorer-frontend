@@ -5,7 +5,7 @@ import { userContext } from '../../context/userContext';
 import { useFormValidation } from '../../utils/useFormValidation';
 import RegisterError from '../RegisterError/RegisterError';
 
-export default function Profile({ updateUser, text, errorDisplay, handleCloseErrorMessage, updateUserSuccess, setIsLogged }) {
+export default function Profile({ updateUser, text, errorDisplay, cleanCash, updateUserSuccess, setIsLogged }) {
 
   const { values, errors, isValid, handleChange, setValue, setIsValid } = useFormValidation();
 
@@ -33,7 +33,8 @@ export default function Profile({ updateUser, text, errorDisplay, handleCloseErr
   }
 
   const singOut = () => {
-    localStorage.removeItem('jwt');
+    cleanCash();
+    localStorage.clear();
     setIsLogged(false);
     navigate('/', true);
   }

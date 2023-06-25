@@ -31,16 +31,26 @@ function App() {
   const [allFindMovies, setAllFindMovies] = useLocalStorage('movies', []); // состояние массива фильмов, найденных с учетом фильтров
   const [moviesByKey, setMoviesByKey] = useLocalStorage('movies-by-key', allFindMovies); //состояние массива фильмов, найденных с учетом ключевого слова
   const [isChecked, setIsChecked] = useLocalStorage('checked', false); // состояние фильтра-чекбокса
+  const [isCheckedSave, setIsCheckedSave] = useLocalStorage('checked-save', false); // состояние фильтра-чекбокса на странице "Сохраненные фильмы"
   const [keyWord, setKeyWord] = useLocalStorage('keyword', ''); // состояние ключевого слова
   const [isLoaderOpened, setIsLoaderOpened] = useState(false); // состояние лоадера
   const [isEmpty, setIsEmpty] = useState(false); // состояние пустоты строки поиска
   const [isLiked, setIsLiked] = useState(false); // состояние лайка
-
+  const [saveMovies, setSaveMovies] = useLocalStorage('allMovies-save', []); // состояние массива сохраненных фильмов
   const [isMoviesFound, setIsMoviesFound] = useLocalStorage('movies-found', true); // состояние найденности фильмов
   const [isServerCrash, setIsServerCrash] = useState(false); // состояние для ошибки сервера
-  
+  const [isMoviesFoundSave, setIsMoviesFoundSave] = useLocalStorage('movies-found-save', true); // состояние найденности фильмов
+  const [allFindMoviesSave, setAllFindMoviesSave] = useLocalStorage('save-movies', saveMovies); // состояние массива фильмов, найденных с учетом фильтров
+  const [keyWordSave, setKeyWordSave] = useLocalStorage('keyword-save', ''); // состояние ключевого слова
+  const [moviesByKeySave, setMoviesByKeySave] = useLocalStorage('movies-by-key-save', allFindMoviesSave); //состояние массива фильмов, найденных с учетом ключевого слова
+  const [saveSearch, setSaveSearch] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    setAllFindMoviesSave(saveMovies);
+  }, [saveMovies])
 
   // Функция открытия бургер-меню
   const handleClick = () => {
@@ -54,87 +64,146 @@ function App() {
 
   // Функция изменения чекбокса
   const handleChecked = () => {
-    setIsChecked(!isChecked);
+    if (location.pathname === '/movies') return setIsChecked(!isChecked);
+    if (location.pathname === '/saved-movies') return setIsCheckedSave(!isCheckedSave);
   }
 
   // Функция постановки лайка
   const handleLike = () => {
-      setIsLiked(!isLiked);
-/*     mainApi.likeMovie(movie)
-      .then(res => console.log(res)) */
+    setIsLiked(!isLiked);
+    /*     mainApi.likeMovie(movie)
+          .then(res => console.log(res)) */
   }
 
   // Функция изменения поля поиска фильмов
   const filterMoviesChange = (e) => {
-    setKeyWord(e.target.value.toLowerCase());
-    if (e.target.value === '') {
-      setIsEmpty(true);
+    if (location.pathname === '/movies') {
+      setKeyWord(e.target.value.toLowerCase());
+      if (e.target.value === '') {
+        setIsEmpty(true);
+      }
       setIsMoviesFound(false);
     }
-    setIsEmpty(false);
+    if (location.pathname === '/saved-movies') {
+      setKeyWordSave(e.target.value.toLowerCase());
+    };
   }
 
   // Функция сабмита поля поиска фильмов
   const filterMoviesSubmite = (e) => {
+    console.log('сабмит')
     e.preventDefault();
-    if (keyWord === '') {
-      setIsEmpty(true);
-      setMovies([]);
-      setAllFindMovies([]);
-      setMoviesByKey([]);
-      return;
+    if (location.pathname === '/movies') {
+      if (keyWord === '') {
+        setIsEmpty(true);
+        setMovies([]);
+        setAllFindMovies([]);
+        setMoviesByKey([]);
+        return;
+      }
+      setIsLoaderOpened(true);
+      moviesApi.arrayMovies()
+        .then(data => {
+          setMovies(data);
+          setIsLoaderOpened(false);
+        })
+        .catch(err => {
+          setIsLoaderOpened(false);
+          setIsMoviesFound(false);
+          setIsServerCrash(true);
+          displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
+        });
     }
-    setIsLoaderOpened(true);
-    moviesApi.arrayMovies()
-      .then(data => {
-        setMovies(data);
-        setIsLoaderOpened(false);
-      })
-      .catch(err => {
-        setIsLoaderOpened(false);
-        setIsMoviesFound(false);
-        setIsServerCrash(true);
-        displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
-      });
+    if (location.pathname === '/saved-movies') {
+      if (keyWordSave === '') {
+        setAllFindMoviesSave(saveMovies);
+        setMoviesByKeySave(saveMovies);
+        return
+      }
+      setSaveSearch(!saveSearch);
+    }
   }
 
   // Эффект при изменении ключевого слова
   useEffect(() => {
-    if (keyWord === '') {
-      setMovies([]);
-      setAllFindMovies([]);
-      setMoviesByKey([]);
-      setIsMoviesFound(false);
-      return;
+    if (location.pathname === '/movies') {
+      if (keyWord === '') {
+        setMovies([]);
+        setAllFindMovies([]);
+        setMoviesByKey([]);
+        setIsMoviesFound(false);
+        return;
+      }
+      setIsEmpty(false);
     }
-    setIsEmpty(false);
-  }, [keyWord])
+    if (location.pathname === '/saved-movies') {
+      if (keyWordSave === '') {
+        setAllFindMoviesSave(saveMovies);
+        setMoviesByKeySave(saveMovies);
+        setIsMoviesFoundSave(true);
+        return;
+      }
+    }
+  }, [keyWord, keyWordSave])
 
   // Эффект - фильтрация данных при получении списка фильмов
   useEffect(() => {
-    const movieKeyWordArray = filterKeyWord(movies, keyWord);
-    if (movieKeyWordArray.length === 0) {
-      setAllFindMovies([]);
-     return setIsMoviesFound(false);
-    }
-    setIsMoviesFound(true);
-    setAllFindMovies(movieKeyWordArray);
-    setMoviesByKey(movieKeyWordArray);
-    const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isChecked);
-    if (movieCheckboxArray.length > 0) {
-      setAllFindMovies(movieCheckboxArray);
+    console.log('изменился сеч')
+    if (location.pathname === '/movies') {
+      const movieKeyWordArray = filterKeyWord(movies, keyWord);
+      if (movieKeyWordArray.length === 0) {
+        setAllFindMovies([]);
+        return setIsMoviesFound(false);
+      }
       setIsMoviesFound(true);
+      setAllFindMovies(movieKeyWordArray);
+      setMoviesByKey(movieKeyWordArray);
+      const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isChecked);
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMovies(movieCheckboxArray);
+        setIsMoviesFound(true);
+      }
+      else {
+        setAllFindMovies([]);
+        setIsMoviesFound(false);
+      }
     }
-    else {
-      setAllFindMovies([]);
-      setIsMoviesFound(false);
+    if (location.pathname === '/saved-movies') {
+      console.log(keyWordSave)
+      const movieKeyWordArray = filterKeyWord(saveMovies, keyWordSave);
+      if (movieKeyWordArray.length === 0) {
+        setAllFindMoviesSave([]);
+        //setIsMoviesFoundSave(false);
+      }
+      console.log(movieKeyWordArray);
+      setIsMoviesFoundSave(true);
+      setAllFindMoviesSave(movieKeyWordArray);
+      setMoviesByKeySave(movieKeyWordArray);
+      const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isCheckedSave);
+      console.log(movieCheckboxArray)
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMoviesSave(movieCheckboxArray);
+        setIsMoviesFoundSave(true);
+      }
+      else {
+        setAllFindMoviesSave([]);
+        //setIsMoviesFoundSave(false);
+      }
     }
-  }, [movies, isChecked])
+  }, [movies, isChecked, isCheckedSave, saveSearch])
 
   useEffect(() => {
-    const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
-    if (movieCheckboxArray.length > 0) {
-      setAllFindMovies(movieCheckboxArray);
+    if (location.pathname === '/movies') {
+      const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMovies(movieCheckboxArray);
+      }
+    }
+    if (location.pathname === '/saved-movies') {
+      const movieCheckboxArray = filterCheckBox(moviesByKeySave, isCheckedSave);
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMoviesSave(movieCheckboxArray);
+      }
     }
   }, [])
 
@@ -219,6 +288,21 @@ function App() {
       });
   }
 
+  const cleanCash = () => {
+    setMovies([]);
+    setAllFindMovies([]);
+    setMoviesByKey([]);
+    setIsChecked(false);
+    setIsCheckedSave(false);
+    setKeyWord('');
+    setSaveMovies([]);
+    setIsMoviesFound(true);
+    setIsMoviesFoundSave(true);
+    setAllFindMoviesSave([]);
+    setKeyWordSave('');
+    setMoviesByKeySave([]);
+  }
+
   return (
     <div className='app'>
       <div className='app__container'>
@@ -279,13 +363,16 @@ function App() {
                   closeMenu={closeMenu} />
                 <ProtectedRouteElement
                   element={SavedMovies}
-                  isMenuOpened={isMenuOpened}
-                  handleClick={handleClick}
-                  closeMenu={closeMenu}
                   isLogged={isLogged}
-                  isLiked={isLiked}
-                  isChecked={isChecked}
-                  setIsMoviesFound={setIsMoviesFound}
+                  movies={allFindMoviesSave}
+                  isChecked={isCheckedSave}
+                  handleChecked={handleChecked}
+                  isMoviesFound={isMoviesFoundSave}
+                  filterMovies={filterMoviesChange}
+                  filterMoviesSubmite={filterMoviesSubmite}
+                  keyWord={keyWordSave}
+                  saveMovies={saveMovies}
+                  setSaveMovies={setSaveMovies}
                 />
               </>
             } />
@@ -307,6 +394,7 @@ function App() {
                   errorDisplay={errorDisplay}
                   updateUserSuccess={updateUserSuccess}
                   setIsLogged={setIsLogged}
+                  cleanCash={cleanCash}
                 />
               </>
             } />

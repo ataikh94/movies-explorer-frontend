@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Login.css';
 import RegisterForm from '../RegisterForm/RegisterForm';
 import ServerMessage from '../ServerMessage/ServerMessage';

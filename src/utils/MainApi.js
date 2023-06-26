@@ -1,7 +1,5 @@
 import { baseUrl } from './constants';
 
-/* AUTH */
-
 // Запрос на регистрацию
 export const register = (name, email, password) => {
     return fetch(`${baseUrl}/signup`, {
@@ -29,17 +27,19 @@ export const authorize = (email, password) => {
 // Запрос на проверку токена
 export const checkToken = (token) => {
     return fetch(`${baseUrl}/users/me`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
     })
-        .then((res) => {
-            if (res.ok) return res.json();
-            return Promise.reject(res)
-        });
-};
+      .then(res => {
+        if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка ${res.status}`);
+      });
+}
 
 // Запрос на обновление данных пользователя
 export const updateUser = (name, email) => {
@@ -89,17 +89,3 @@ export const deleteMovie = (id) => {
     })
         .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
 };
-
-/* export const changeLikeStatus = (movie, isLiked) => {
-    return fetch(`${baseUrl}${isLiked ? `/movies/${movie.movieId}` : '/movies'}`, {
-        method: isLiked ? 'DELETE' : 'POST',
-        headers: {
-            authorization: `Bearer ${localStorage.getItem('jwt')}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((res) => {
-            if (res.ok) return res.json();
-            return Promise.reject(res)
-        });
-} */

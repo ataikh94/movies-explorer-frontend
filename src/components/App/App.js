@@ -222,7 +222,7 @@ function App() {
 
   // Эффект при авторизации - получение сохраненных фильмов пользователя
   useEffect(() => {
-    if (location.pathname === '/movies') getSaveMovies();
+    if (isLogged && location.pathname === '/movies') getSaveMovies();
   }, [isLogged])
 
   return (

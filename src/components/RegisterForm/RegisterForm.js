@@ -37,7 +37,6 @@ export default function RegisterForm({
               placeholder='Email'
               autoComplete='off'
               onChange={handleChange}
-              pattern='^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+.[A-Za-z]{2,3}$'
               title='Значение в поле "E-mail" должно состоять только из цифр или латинских букв, а также может содержать символы "-", "_", "+", "%", "@" и ".".'
               value={values['email'] ?? ''}
               required />

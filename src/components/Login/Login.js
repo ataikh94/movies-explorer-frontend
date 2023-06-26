@@ -1,20 +1,20 @@
 import React from 'react';
 import './Login.css';
 import RegisterForm from '../RegisterForm/RegisterForm';
+import ServerMessage from '../ServerMessage/ServerMessage';
 import { useFormValidation } from '../../utils/useFormValidation';
-import RegisterError from '../RegisterError/RegisterError';
 
-export default function Login({ handleLogin, text, errorDisplay, closeError }) {
+export default function Login({ handleLogin, text, errorDisplay }) {
 
     const { values, errors, isValid, handleChange, setValue } = useFormValidation();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const { email, password } = values;
-        handleLogin(email, password)
+        handleLogin(email, password);
     }
 
-    const errorClassName = (name) => `register-form__input-error ${errors[name] ? 'register-form__input-error_active' : ''}`
+    const errorClassName = (name) => `register-form__input-error ${errors[name] ? 'register-form__input-error_active' : ''}`;
 
     return (
         <div className='login'>
@@ -22,7 +22,7 @@ export default function Login({ handleLogin, text, errorDisplay, closeError }) {
                 formTitle='Рады видеть!'
                 btnName='Войти'
                 formDescription='Ещё не зарегистрированы?'
-                btnRout='Регистрация'
+                btnRoute='Регистрация'
                 btnPath='/signup'
                 errorClassName={errorClassName}
                 handleSubmit={handleSubmit}
@@ -32,7 +32,7 @@ export default function Login({ handleLogin, text, errorDisplay, closeError }) {
                 values={values}
                 errors={errors}
             />
-            <RegisterError text={text} errorDisplay={errorDisplay} closeError={closeError} />
+            <ServerMessage text={text} errorDisplay={errorDisplay} />
         </div>
     )
 }

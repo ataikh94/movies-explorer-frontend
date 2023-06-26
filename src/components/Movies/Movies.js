@@ -1,25 +1,23 @@
 import React, { useEffect } from 'react';
 import './Movies.css';
-import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import RegisterError from '../RegisterError/RegisterError';
+import Footer from '../Footer/Footer';
+import ServerMessage from '../ServerMessage/ServerMessage';
 import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
 
-
 export default function Movies({
+  movies,
+  isChecked,
+  isMoviesFound,
+  isLoaderOpened,
   keyWord,
   isEmpty,
-  isLoaderOpened,
-  movies,
+  handleLike,
   text,
   errorDisplay,
   isServerCrash,
-  isChecked,
-  isMoviesFound,
-  setIsMoviesFound,
-  handleLike,
   setIsChecked,
   setKeyWord,
   setIsEmpty,
@@ -27,10 +25,9 @@ export default function Movies({
   setAllFindMovies,
   setMoviesByKey,
   setIsLoaderOpened,
-  setIsServerCrash,
-  displayErrorMessage,
   moviesByKey,
   allFindMovies,
+  setIsMoviesFound,
   savedMovies,
   getMovies
 }) {
@@ -97,6 +94,8 @@ export default function Movies({
     }
   }, [movies, isChecked, keyWord])
 
+
+  // Эффект при монтировании - отрисовка фильмов с учётом чекбокса
   useEffect(() => {
     const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
     if (movieCheckboxArray.length > 0) {
@@ -117,7 +116,7 @@ export default function Movies({
         {isLoaderOpened ?
           <Preloader isLoaderOpened={isLoaderOpened} /> :
           errorDisplay ?
-            <RegisterError
+            <ServerMessage
               text={text}
               errorDisplay={errorDisplay}
               isServerCrash={isServerCrash} /> :
@@ -127,8 +126,7 @@ export default function Movies({
               isChecked={isChecked}
               isMoviesFound={isMoviesFound}
               setIsMoviesFound={setIsMoviesFound}
-              savedMovies={savedMovies} />
-        }
+              savedMovies={savedMovies} />}
       </main>
       <Footer />
     </>

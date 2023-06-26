@@ -7,10 +7,9 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
 
 export default function SavedMovies({
-  isLiked,
-  handleLike,
-  setSaveMovies,
   saveMovies,
+  setSaveMovies,
+  handleLike,
   isMoviesFoundSave,
   setIsMoviesFoundSave,
   allFindMoviesSave,
@@ -23,7 +22,7 @@ export default function SavedMovies({
   isCheckedSave,
   setIsCheckedSave,
   isSavedMovies,
-  deleteSaveMovie
+  getSaveMovies
 }) {
 
   // Функция изменения состояния чекбокса
@@ -70,11 +69,6 @@ export default function SavedMovies({
 
   // Эффект при монтировании - формирование данных для отображения
   useEffect(() => {
-    mainApi.getMovies()
-      .then(res => {
-        setSaveMovies(res);
-      })
-      .catch(err => console.log(err));
     if (!allFindMoviesSave) {
       setAllFindMoviesSave(saveMovies);
     }
@@ -93,8 +87,8 @@ export default function SavedMovies({
           filterMovies={filterMoviesChange}
           filterMoviesSubmite={filterMoviesSubmite}
           keyWord={keyWordSave} />
-        <MoviesCardList movies={allFindMoviesSave} savedMovies={saveMovies} isChecked={isCheckedSave} isLiked={isLiked} isMoviesFound={isMoviesFoundSave}
-          handleLike={handleLike} isSavedMovies={true}/>
+        <MoviesCardList movies={allFindMoviesSave} savedMovies={saveMovies} isChecked={isCheckedSave} isMoviesFound={isMoviesFoundSave}
+          handleLike={handleLike} isSavedMovies={isSavedMovies}/>
       </main>
       <Footer />
     </>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { movieApi } from '../../utils/constants';
 
 export default function MoviesCardList({
   movies,
@@ -22,11 +21,13 @@ export default function MoviesCardList({
       setCountVisibleItems(countVisibleItems + 5) :
       setCountVisibleItems(countVisibleItems + 7);
   }
-
+ 
+  // Функция учёта размера экрана устройства
   const windowSizeControl = () => {
     window.innerWidth <= 550 ? setCountVisibleItems(5) : setCountVisibleItems(7);
   }
 
+  // Подписка на изменение размера экрана
   window.onresize = windowSizeControl;
 
   // Эффект при изменении чекбокса - устанавливать первоначальное количество отображаемых записей

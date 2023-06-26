@@ -3,15 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Profile.css';
 import { userContext } from '../../context/userContext';
 import { useFormValidation } from '../../utils/useFormValidation';
-import RegisterError from '../RegisterError/RegisterError';
+import ServerMessage from '../ServerMessage/ServerMessage';
 
-export default function Profile({ updateUser, text, errorDisplay, cleanCash, updateUserSuccess, setIsLogged }) {
+export default function Profile({
+  updateUser,
+  text,
+  errorDisplay,
+  cleanCash,
+  updateUserSuccess,
+  setIsLogged }) {
 
-  const { values, errors, isValid, handleChange, setValue, setIsValid } = useFormValidation();
-
-  useEffect(() => {
-    setIsValid(true);
-  }, []);
+  const { values, errors, isValid, handleChange, setValue } = useFormValidation();
 
   const errorClassName = (name) => `profile-form__input-error ${errors[name] ? 'profile-form__input-error_active' : ''}`
 
@@ -84,7 +86,7 @@ export default function Profile({ updateUser, text, errorDisplay, cleanCash, upd
           </button>
         </form>
       </main>
-      <RegisterError text={text} errorDisplay={errorDisplay} updateUserSuccess={updateUserSuccess}/>
+      <ServerMessage text={text} errorDisplay={errorDisplay} updateUserSuccess={updateUserSuccess} />
     </>
   )
 }

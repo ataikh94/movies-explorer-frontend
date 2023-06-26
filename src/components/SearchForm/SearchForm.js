@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react';
 import './SearchForm.css';
-import searchIcon from '../../images/search-icon.svg';
-import searchButton from '../../images/search-button.svg';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import { useFormValidation } from '../../utils/useFormValidation';
+import searchIcon from '../../images/search-icon.svg';
+import searchButton from '../../images/search-button.svg';
 
 export default function SearchForm({ isChecked, isEmpty, keyWord, handleChecked, filterMovies, filterMoviesSubmite }) {
 
     const { isValid, errors, handleChange, setIsValid } = useFormValidation();
-    useEffect(() => {
-        setIsValid(true);
-    }, []);
 
+    // Функция изменения ключевого слова
     const changeKeyWord = (e) => {
         filterMovies(e);
         handleChange(e);
     }
+    
+    // Эффект при монтировании - поле поиска является валидным
+    useEffect(() => {
+        setIsValid(true);
+    }, []);
 
     return (
         <form className='search-form' onSubmit={filterMoviesSubmite} noValidate>

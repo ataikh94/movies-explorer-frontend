@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navigation.css';
-import navigation from '../../images/navigation.svg';
 import Menu from '../Menu/Menu';
 import AccountButon from '../AccountButon/AccountButon';
-
+import navigation from '../../images/navigation.svg';
 
 export default function Navigation({ isLogged, isMenuOpened, handleClick, closeMenu }) {
   return (

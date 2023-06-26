@@ -1,0 +1,31 @@
+.server-message {
+    display: none;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.server-message_active {
+    display: block;
+    bottom: 180px;
+    max-width: 392px;
+    margin: 0 auto;
+    transition: all 0.3s;
+}
+
+.server-message__text {
+    color: #EE3465;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    margin: 0;
+}
+
+.server-message__text_success {
+    color: rgb(43,224,128);
+}
+
+.server-message__text_server-crashed {
+    position: relative;
+    bottom: -15px;
+}

@@ -88,7 +88,7 @@
 
 @media screen and (max-width: 850px) {
     .movie {
-        margin: 40px 30px;
+        margin: 40px 30px 0;
     }
 
     .movie__info {
@@ -100,7 +100,7 @@
     .movie {
         flex-direction: column-reverse;
         align-items: center;
-        margin: 18px 10px;
+        margin: 18px 10px 0;
     }
 
     .movie:first-child {
@@ -136,6 +136,16 @@
     }
 
     .button__like {
+        grid-column-start: 2;
+        justify-self: right;
+        margin: 3px 16px 0 0;
+    }
+    .button__dislike {
+        grid-column-start: 2;
+        justify-self: right;
+        margin: 3px 16px 0 0;
+    }
+    .button__delete {
         grid-column-start: 2;
         justify-self: right;
         margin: 3px 16px 0 0;

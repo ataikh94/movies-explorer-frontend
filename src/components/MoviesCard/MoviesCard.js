@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import './MoviesCard.css';
 
 export default function MoviesCard({ movie, handleLike, savedMovies, isSavedMovies }) {
+
     // Преобразование количества минут в строку, содержащую часы и минуты
     const duratuinString = (Math.floor(movie.duration / 60) > 0 ? (Math.floor(movie.duration / 60) + 'ч ') : '') + ((movie.duration % 60) > 0 ? (movie.duration % 60 + 'м') : '');
+    const [isLiked, setIsLiked] = useState(false); // Состояние лайка карточки
 
-    const [isLiked, setIsLiked] = useState(false);
-
+    // Фнкция клика по кнопке лайка/удаления лайка
     const handlelikeClick = () => {
         if (isSavedMovies) handleLike(movie._id);
         else {
@@ -16,19 +17,12 @@ export default function MoviesCard({ movie, handleLike, savedMovies, isSavedMovi
         };
     }
 
+    // Эффект при изменении списка сохраненных фильмов - установка / снятие лайка
     useEffect(() => {
         if (!isSavedMovies) {
-            console.log(savedMovies)
-          setIsLiked(savedMovies.some(element => element.movieId === movie.movieId))
+          setIsLiked(savedMovies.some(element => element.movieId === movie.movieId));
         }
     }, [savedMovies])
-
-    
-/*     useEffect(() => {
-        if (!isSavedMovies) {
-         setIsLiked(savedMovies.some(element => element.movieId === movie.movieId))
-        }
-    }, []) */
 
     return (
         <div className='movie'>

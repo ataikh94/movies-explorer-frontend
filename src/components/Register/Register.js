@@ -2,12 +2,11 @@ import React from 'react';
 import './Register.css';
 import RegisterForm from '../RegisterForm/RegisterForm';
 import { useFormValidation } from '../../utils/useFormValidation';
-import RegisterError from '../RegisterError/RegisterError';
+import ServerMessage from '../ServerMessage/ServerMessage';
 
-export default function Register({ handleRegister, text, errorDisplay, closeError }) {
+export default function Register({ handleRegister, text, errorDisplay }) {
 
     const { values, errors, isValid, handleChange, setValue } = useFormValidation();
-
     const errorClassName = (name) => `register-form__input-error ${errors[name] ? 'register-form__input-error_active' : ''}`
 
     const handleSubmit = (e) => {
@@ -22,7 +21,7 @@ export default function Register({ handleRegister, text, errorDisplay, closeErro
                 formTitle='Добро пожаловать!'
                 btnName='Зарегистрироваться'
                 formDescription='Уже зарегистрированы?'
-                btnRout='Войти'
+                btnRoute='Войти'
                 btnPath='/signin'
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
@@ -47,7 +46,7 @@ export default function Register({ handleRegister, text, errorDisplay, closeErro
                     required />
                 <span className={errorClassName('name')}>{errors['name']}</span>
             </RegisterForm>
-            <RegisterError text={text} errorDisplay={errorDisplay} closeError={closeError} />
+            <ServerMessage text={text} errorDisplay={errorDisplay} />
         </div>
     )
 }

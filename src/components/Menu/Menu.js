@@ -1,8 +1,8 @@
 import React from 'react';
-import './Menu.css';
-import close from '../../images/close.svg';
-import AccountButon from '../AccountButon/AccountButon';
 import { Link } from 'react-router-dom';
+import './Menu.css';
+import AccountButon from '../AccountButon/AccountButon';
+import close from '../../images/close.svg';
 
 export default function Menu({ isOpened, closeMenu }) {
     return (

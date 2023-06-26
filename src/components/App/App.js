@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
+import Header from '../Header/Header';
 import Main from '../Main/Main';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import Login from '../Login/Login.js';
@@ -8,13 +9,12 @@ import Register from '../Register/Register';
 import Movies from '../Movies/Movies';
 import Profile from '../Profile/Profile';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import * as mainApi from '../../utils/MainApi';
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 import { userContext } from '../../context/userContext';
-import Header from '../Header/Header';
 import { useLocalStorage } from '../../utils/useLocalStorage';
 import { movieApi } from '../../utils/constants';
 import * as moviesApi from '../../utils/MoviesApi';
+import * as mainApi from '../../utils/MainApi';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false); // состояние авторизации пользователя
@@ -23,6 +23,7 @@ function App() {
     name: '',
     email: ''
   }); // состояние данных текущего пользователя
+
   const [isMenuOpened, setIsMenuOpened] = useState(false); // состояние бургер-меню
   const [errorMessage, setErrorMessage] = useState(''); // текст сообщения об ошибке при получении данных из API
   const [errorDisplay, setErrorDisplay] = useState(false); // состояние отображения ошибки при получении данных из API
@@ -139,6 +140,7 @@ function App() {
     setMoviesByKeySave([]);
   }
 
+  // Функция получения сохраненных фильмов пользователей
   const getSaveMovies = () => {
     mainApi.getMovies()
       .then(res => {
@@ -147,6 +149,7 @@ function App() {
       .catch(err => console.log(err));
   }
 
+  // Функция добавления и удаления фильма
   const toggleLike = (isLiked, movie) => {
     if (isLiked) {
       const movieToDelete = saveMovies.find(e => e.movieId === movie.movieId);
@@ -157,20 +160,21 @@ function App() {
     };
   }
 
-    // Функция постановки лайка
-    const saveMovie = (movie) => {
-      console.log(movie)
-      mainApi.likeMovie(movie)
-        .then(res => setSaveMovies([...saveMovies, res]))
-    }
-    console.log(saveMovies);
+  // Функция сохранения фильма
+  const saveMovie = (movie) => {
+    mainApi.likeMovie(movie)
+      .then(res => setSaveMovies([...saveMovies, res]))
+      .catch(err => console.log(err));
+  }
 
+  // Функция удаления фильма
   const deleteSaveMovie = (id) => {
     mainApi.deleteMovie(id)
       .then(res => setSaveMovies((array) => array.filter((m) => m._id !== id)))
       .catch(err => console.log(err))
   }
 
+  // Функция получения фильмов из стороннего API и обработка записей
   const getMovies = () => {
     moviesApi.arrayMovies()
       .then(data => {
@@ -216,8 +220,9 @@ function App() {
     }
   }, []);
 
+  // Эффект при авторизации - получение сохраненных фильмов пользователя
   useEffect(() => {
-    getSaveMovies();
+    if (location.pathname === '/movies') getSaveMovies();
   }, [isLogged])
 
   return (
@@ -271,8 +276,6 @@ function App() {
                   setAllFindMovies={setAllFindMovies}
                   setMoviesByKey={setMoviesByKey}
                   setIsLoaderOpened={setIsLoaderOpened}
-                  setIsServerCrash={setIsServerCrash}
-                  displayErrorMessage={displayErrorMessage}
                   moviesByKey={moviesByKey}
                   allFindMovies={allFindMovies}
                   setIsMoviesFound={setIsMoviesFound}
@@ -300,13 +303,13 @@ function App() {
                   setAllFindMoviesSave={setAllFindMoviesSave}
                   keyWordSave={keyWordSave}
                   setKeyWordSave={setKeyWordSave}
-                  moviesByKeySave={moviesByKeySave}
                   setMoviesByKeySave={setMoviesByKeySave}
                   saveSearch={saveSearch}
                   setSaveSearch={setSaveSearch}
                   isCheckedSave={isCheckedSave}
                   setIsCheckedSave={setIsCheckedSave}
                   isSavedMovies={true}
+                  getSaveMovies={getSaveMovies}
                 />
               </>
             } />
@@ -319,9 +322,6 @@ function App() {
                   closeMenu={closeMenu} />
                 <ProtectedRouteElement
                   element={Profile}
-                  isMenuOpened={isMenuOpened}
-                  handleClick={handleClick}
-                  closeMenu={closeMenu}
                   isLogged={isLogged}
                   updateUser={updateUser}
                   text={errorMessage}

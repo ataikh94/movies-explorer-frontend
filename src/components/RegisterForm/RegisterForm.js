@@ -7,14 +7,13 @@ export default function RegisterForm({
   formTitle,
   btnName,
   formDescription,
-  btnRout,
+  btnRoute,
   btnPath,
   handleSubmit,
   handleChange,
   values,
   errors,
   isValid,
-  setValue,
   errorClassName,
   children
  }) {
@@ -58,7 +57,7 @@ export default function RegisterForm({
           <div className='register-form__element-group'>
             <button className={`register-form__submit-button ${isValid ? '' : 'register-form__submit-button_disabled'}`} type='submit' disabled={!isValid}>{btnName}</button>
             <span className='register-form__span'>{`${formDescription} `}
-              <Link to={btnPath} className='register-form__span-link'>{btnRout}</Link>
+              <Link to={btnPath} className='register-form__span-link'>{btnRoute}</Link>
             </span>
           </div>
         </form>

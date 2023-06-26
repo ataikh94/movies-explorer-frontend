@@ -13,6 +13,8 @@ import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 import { userContext } from '../../context/userContext';
 import Header from '../Header/Header';
 import { useLocalStorage } from '../../utils/useLocalStorage';
+import { movieApi } from '../../utils/constants';
+import * as moviesApi from '../../utils/MoviesApi';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false); // состояние авторизации пользователя
@@ -34,7 +36,6 @@ function App() {
   const [keyWord, setKeyWord] = useLocalStorage('keyword', ''); // состояние ключевого слова
   const [isLoaderOpened, setIsLoaderOpened] = useState(false); // состояние лоадера
   const [isEmpty, setIsEmpty] = useState(false); // состояние строки поиска
-  const [isLiked, setIsLiked] = useState(false); // состояние лайка
   const [isMoviesFound, setIsMoviesFound] = useLocalStorage('movies-found', true); // состояние результата поиска фильмов
   const [isServerCrash, setIsServerCrash] = useState(false); // состояние для ошибки сервера
 
@@ -58,13 +59,6 @@ function App() {
   // Функция закрытия бургер-меню
   const closeMenu = () => {
     setIsMenuOpened(false);
-  }
-
-  // Функция постановки лайка
-  const handleLike = (movie) => {
-    setIsLiked(!isLiked);
-    mainApi.likeMovie(movie)
-      .then(res => console.log(res))
   }
 
   // Функция отображения сообщения об ошибке, полученной при запросе к API
@@ -111,8 +105,6 @@ function App() {
       });
   }
 
-
-
   // Функция обновления данных пользователя через профиль
   const updateUser = (name, email) => {
     mainApi.updateUser(name, email)
@@ -147,6 +139,64 @@ function App() {
     setMoviesByKeySave([]);
   }
 
+  const getSaveMovies = () => {
+    mainApi.getMovies()
+      .then(res => {
+        setSaveMovies(res);
+      })
+      .catch(err => console.log(err));
+  }
+
+  const toggleLike = (isLiked, movie) => {
+    if (isLiked) {
+      const movieToDelete = saveMovies.find(e => e.movieId === movie.movieId);
+      deleteSaveMovie(movieToDelete._id);
+    }
+    else {
+      saveMovie(movie)
+    };
+  }
+
+    // Функция постановки лайка
+    const saveMovie = (movie) => {
+      console.log(movie)
+      mainApi.likeMovie(movie)
+        .then(res => setSaveMovies([...saveMovies, res]))
+    }
+    console.log(saveMovies);
+
+  const deleteSaveMovie = (id) => {
+    mainApi.deleteMovie(id)
+      .then(res => setSaveMovies((array) => array.filter((m) => m._id !== id)))
+      .catch(err => console.log(err))
+  }
+
+  const getMovies = () => {
+    moviesApi.arrayMovies()
+      .then(data => {
+        const updatedArray = data.map(object => {
+          const movieObject = Object.assign({}, object, { image: `${movieApi}${object.image.url}` },
+            { thumbnail: `${movieApi}${object.image.formats.thumbnail.url}` },
+            { movieId: object.id });
+          delete movieObject.created_at
+          delete movieObject.id;
+          delete movieObject.updated_at;
+          return movieObject;
+        })
+        return updatedArray;
+      })
+      .then(data => {
+        setMovies(data);
+        setIsLoaderOpened(false);
+      })
+      .catch(err => {
+        setIsLoaderOpened(false);
+        setIsMoviesFound(false);
+        setIsServerCrash(true);
+        displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
+      });
+  }
+
   // Эффект при монтировании - проверка JWT-токена
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
@@ -162,8 +212,13 @@ function App() {
             navigate(url, true);
           }
         })
+        .catch(err => console.log(err));
     }
   }, []);
+
+  useEffect(() => {
+    getSaveMovies();
+  }, [isLogged])
 
   return (
     <div className='app'>
@@ -205,8 +260,7 @@ function App() {
                   isLoaderOpened={isLoaderOpened}
                   keyWord={keyWord}
                   isEmpty={isEmpty}
-                  handleLike={handleLike}
-                  isLiked={isLiked}
+                  handleLike={toggleLike}
                   text={errorMessage}
                   errorDisplay={errorDisplay}
                   isServerCrash={isServerCrash}
@@ -222,6 +276,8 @@ function App() {
                   moviesByKey={moviesByKey}
                   allFindMovies={allFindMovies}
                   setIsMoviesFound={setIsMoviesFound}
+                  savedMovies={saveMovies}
+                  getMovies={getMovies}
                 />
               </>
             } />
@@ -235,11 +291,9 @@ function App() {
                 <ProtectedRouteElement
                   element={SavedMovies}
                   isLogged={isLogged}
-                  //   movies={allFindMoviesSave}
                   saveMovies={saveMovies}
                   setSaveMovies={setSaveMovies}
-                  isLiked={isLiked}
-                  handleLike={handleLike}
+                  handleLike={deleteSaveMovie}
                   isMoviesFoundSave={isMoviesFoundSave}
                   setIsMoviesFoundSave={setIsMoviesFoundSave}
                   allFindMoviesSave={allFindMoviesSave}
@@ -252,6 +306,7 @@ function App() {
                   setSaveSearch={setSaveSearch}
                   isCheckedSave={isCheckedSave}
                   setIsCheckedSave={setIsCheckedSave}
+                  isSavedMovies={true}
                 />
               </>
             } />

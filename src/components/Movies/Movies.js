@@ -5,9 +5,8 @@ import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import RegisterError from '../RegisterError/RegisterError';
-import { movieApi } from '../../utils/constants';
 import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
-import * as moviesApi from '../../utils/MoviesApi';
+
 
 export default function Movies({
   keyWord,
@@ -21,7 +20,6 @@ export default function Movies({
   isMoviesFound,
   setIsMoviesFound,
   handleLike,
-  isLiked,
   setIsChecked,
   setKeyWord,
   setIsEmpty,
@@ -33,6 +31,8 @@ export default function Movies({
   displayErrorMessage,
   moviesByKey,
   allFindMovies,
+  savedMovies,
+  getMovies
 }) {
 
   // Функция изменения чекбокса
@@ -60,29 +60,7 @@ export default function Movies({
       return;
     }
     setIsLoaderOpened(true);
-    moviesApi.arrayMovies()
-      .then(data => {
-        const updatedArray = data.map(object => {
-          const movieObject = Object.assign({}, object, { image: `${movieApi}${object.image.url}` },
-            { thumbnail: `${movieApi}${object.image.formats.thumbnail.url}` },
-            { movieId: object.id });
-          delete movieObject.created_at
-          delete movieObject.id;
-          delete movieObject.updated_at;
-          return movieObject;
-        })
-        return updatedArray;
-      })
-      .then(data => {
-        setMovies(data);
-        setIsLoaderOpened(false);
-      })
-      .catch(err => {
-        setIsLoaderOpened(false);
-        setIsMoviesFound(false);
-        setIsServerCrash(true);
-        displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
-      });
+    getMovies();
   }
 
   // Эффект при изменении ключевого слова
@@ -145,11 +123,11 @@ export default function Movies({
               isServerCrash={isServerCrash} /> :
             <MoviesCardList
               movies={allFindMovies}
-              isLiked={isLiked}
               handleLike={handleLike}
               isChecked={isChecked}
               isMoviesFound={isMoviesFound}
-              setIsMoviesFound={setIsMoviesFound} />
+              setIsMoviesFound={setIsMoviesFound}
+              savedMovies={savedMovies} />
         }
       </main>
       <Footer />

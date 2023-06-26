@@ -51,20 +51,7 @@ export const updateUser = (name, email) => {
         },
         body: JSON.stringify({ name, email })
     })
-    .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
-};
-
-// Запрос на лайк фильма
-export const likeMovie = (movie) => {
-    return fetch(`${baseUrl}/movies`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(movie)
-    })
-    .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+        .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
 };
 
 // Запрос на список сохраненных фильмов
@@ -76,5 +63,43 @@ export const getMovies = () => {
             'Content-Type': 'application/json',
         }
     })
-    .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+        .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
 };
+
+// Запрос на добавление фильма
+export const likeMovie = (movie) => {
+    return fetch(`${baseUrl}/movies`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movie)
+    })
+        .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+};
+
+export const deleteMovie = (id) => {
+    return fetch(`${baseUrl}/movies/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+};
+
+/* export const changeLikeStatus = (movie, isLiked) => {
+    return fetch(`${baseUrl}${isLiked ? `/movies/${movie.movieId}` : '/movies'}`, {
+        method: isLiked ? 'DELETE' : 'POST',
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((res) => {
+            if (res.ok) return res.json();
+            return Promise.reject(res)
+        });
+} */

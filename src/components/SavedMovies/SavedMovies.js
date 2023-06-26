@@ -21,7 +21,9 @@ export default function SavedMovies({
   saveSearch,
   setSaveSearch,
   isCheckedSave,
-  setIsCheckedSave
+  setIsCheckedSave,
+  isSavedMovies,
+  deleteSaveMovie
 }) {
 
   // Функция изменения состояния чекбокса
@@ -91,9 +93,8 @@ export default function SavedMovies({
           filterMovies={filterMoviesChange}
           filterMoviesSubmite={filterMoviesSubmite}
           keyWord={keyWordSave} />
-        <MoviesCardList movies={allFindMoviesSave} isChecked={isCheckedSave} isLiked={isLiked} isMoviesFound={isMoviesFoundSave}
-          handleLike={handleLike} removeButton={true} />
-        {/*  <MoviesCard  /> */}
+        <MoviesCardList movies={allFindMoviesSave} savedMovies={saveMovies} isChecked={isCheckedSave} isLiked={isLiked} isMoviesFound={isMoviesFoundSave}
+          handleLike={handleLike} isSavedMovies={true}/>
       </main>
       <Footer />
     </>

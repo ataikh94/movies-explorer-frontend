@@ -7,8 +7,10 @@ export default function MoviesCardList({
   movies,
   isChecked,
   isMoviesFound,
-  isLiked,
-  handleLike
+  handleLike,
+  savedMovies,
+  isSavedMovies,
+  deleteSaveMovie
 }) {
   const [isHidden, setIsHidden] = useState(false); // состояние кнопки "Ещё"
   const [countVisibleItems, setCountVisibleItems] = useState(7); // первоначальное количество отображаемых элементов
@@ -50,7 +52,9 @@ export default function MoviesCardList({
               movie={elem}
               key={elem.movieId}
               handleLike={handleLike}
-              isLiked={isLiked} />
+              savedMovies={savedMovies}
+              isSavedMovies={isSavedMovies}
+              deleteSaveMovie={deleteSaveMovie} />
           })}
           < button type='button'
             onClick={handleClick}

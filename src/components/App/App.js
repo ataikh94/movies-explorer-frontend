@@ -11,11 +11,8 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import * as mainApi from '../../utils/MainApi';
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
 import { userContext } from '../../context/userContext';
-import * as moviesApi from '../../utils/MoviesApi';
 import Header from '../Header/Header';
 import { useLocalStorage } from '../../utils/useLocalStorage';
-import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
-import { movieApi } from '../../utils/constants';
 
 function App() {
   const [isLogged, setIsLogged] = useState(false); // состояние авторизации пользователя
@@ -28,30 +25,30 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(''); // текст сообщения об ошибке при получении данных из API
   const [errorDisplay, setErrorDisplay] = useState(false); // состояние отображения ошибки при получении данных из API
   const [updateUserSuccess, setUpdateUserSuccess] = useState(false); // состояние успешного обновления данных пользователя для дополнительного класса
+
+  //Переменные для страницы movies
   const [movies, setMovies] = useLocalStorage('allMovies', []); // состояние массива фильмов, полученных из API
-  const [allFindMovies, setAllFindMovies] = useLocalStorage('movies', []); // состояние массива фильмов, найденных с учетом фильтров
+  const [allFindMovies, setAllFindMovies] = useLocalStorage('movies', []); // состояние массива фильмов, найденных с учетом всех фильтров
   const [moviesByKey, setMoviesByKey] = useLocalStorage('movies-by-key', allFindMovies); //состояние массива фильмов, найденных с учетом ключевого слова
   const [isChecked, setIsChecked] = useLocalStorage('checked', false); // состояние фильтра-чекбокса
-  const [isCheckedSave, setIsCheckedSave] = useLocalStorage('checked-save', false); // состояние фильтра-чекбокса на странице "Сохраненные фильмы"
   const [keyWord, setKeyWord] = useLocalStorage('keyword', ''); // состояние ключевого слова
   const [isLoaderOpened, setIsLoaderOpened] = useState(false); // состояние лоадера
-  const [isEmpty, setIsEmpty] = useState(false); // состояние пустоты строки поиска
+  const [isEmpty, setIsEmpty] = useState(false); // состояние строки поиска
   const [isLiked, setIsLiked] = useState(false); // состояние лайка
-  const [saveMovies, setSaveMovies] = useLocalStorage('allMovies-save', []); // состояние массива сохраненных фильмов
-  const [isMoviesFound, setIsMoviesFound] = useLocalStorage('movies-found', true); // состояние найденности фильмов
+  const [isMoviesFound, setIsMoviesFound] = useLocalStorage('movies-found', true); // состояние результата поиска фильмов
   const [isServerCrash, setIsServerCrash] = useState(false); // состояние для ошибки сервера
-  const [isMoviesFoundSave, setIsMoviesFoundSave] = useLocalStorage('movies-found-save', true); // состояние найденности фильмов
-  const [allFindMoviesSave, setAllFindMoviesSave] = useLocalStorage('save-movies', saveMovies); // состояние массива фильмов, найденных с учетом фильтров
-  const [keyWordSave, setKeyWordSave] = useLocalStorage('keyword-save', ''); // состояние ключевого слова
-  const [moviesByKeySave, setMoviesByKeySave] = useLocalStorage('movies-by-key-save', allFindMoviesSave); //состояние массива фильмов, найденных с учетом ключевого слова
-  const [saveSearch, setSaveSearch] = useState(false);
+
+  //Переменные для страницы saved-movies
+  const [saveMovies, setSaveMovies] = useLocalStorage('allMovies-save', []); // состояние массива сохраненных фильмов
+  const [isMoviesFoundSave, setIsMoviesFoundSave] = useLocalStorage('movies-found-save', true); // состояние результата поиска сохраненных фильмов
+  const [allFindMoviesSave, setAllFindMoviesSave] = useLocalStorage('save-movies', []); // состояние массива сохраненных фильмов, найденных с учетом всех фильтров
+  const [keyWordSave, setKeyWordSave] = useLocalStorage('keyword-save', ''); // состояние ключевого слова для сохраненных фильмов
+  const [moviesByKeySave, setMoviesByKeySave] = useLocalStorage('movies-by-key-save', allFindMoviesSave); //состояние массива сохраненных фильмов, найденных с учетом ключевого слова
+  const [saveSearch, setSaveSearch] = useState(false); // состояние поиска сохраненных фильмов
+  const [isCheckedSave, setIsCheckedSave] = useLocalStorage('checked-save', false); // состояние чекбокса на странице сохраненных фильмов
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    setAllFindMoviesSave(saveMovies);
-  }, [saveMovies])
 
   // Функция открытия бургер-меню
   const handleClick = () => {
@@ -63,158 +60,12 @@ function App() {
     setIsMenuOpened(false);
   }
 
-  // Функция изменения чекбокса
-  const handleChecked = () => {
-    if (location.pathname === '/movies') return setIsChecked(!isChecked);
-    if (location.pathname === '/saved-movies') return setIsCheckedSave(!isCheckedSave);
-  }
-
   // Функция постановки лайка
   const handleLike = (movie) => {
     setIsLiked(!isLiked);
-     mainApi.likeMovie(movie)
-          .then(res => console.log(res))
+    mainApi.likeMovie(movie)
+      .then(res => console.log(res))
   }
-
-  // Функция изменения поля поиска фильмов
-  const filterMoviesChange = (e) => {
-    if (location.pathname === '/movies') {
-      setKeyWord(e.target.value.toLowerCase());
-      if (e.target.value === '') {
-        setIsEmpty(true);
-      }
-      setIsMoviesFound(false);
-    }
-    if (location.pathname === '/saved-movies') {
-      setKeyWordSave(e.target.value.toLowerCase());
-    };
-  }
-
-  // Функция сабмита поля поиска фильмов
-  const filterMoviesSubmite = (e) => {
-    e.preventDefault();
-    if (location.pathname === '/movies') {
-      if (keyWord === '') {
-        setIsEmpty(true);
-        setMovies([]);
-        setAllFindMovies([]);
-        setMoviesByKey([]);
-        return;
-      }
-      setIsLoaderOpened(true);
-      moviesApi.arrayMovies()
-        .then(data => {
-          const updatedArray = data.map(object => {
-            const movieObject = Object.assign({}, object, { image: `${movieApi}${object.image.url}` },
-             { thumbnail: `${movieApi}${object.image.formats.thumbnail.url}` },
-             { movieId: object.id });
-            delete movieObject.created_at
-            delete movieObject.id;
-            delete movieObject.updated_at;
-            return movieObject;
-          })
-          return updatedArray;
-        })
-        .then(data => {
-          console.log(data)
-          setMovies(data);
-          setIsLoaderOpened(false);
-        })
-        .catch(err => {
-          setIsLoaderOpened(false);
-          setIsMoviesFound(false);
-          setIsServerCrash(true);
-          displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
-        });
-    }
-    if (location.pathname === '/saved-movies') {
-      if (keyWordSave === '') {
-        setAllFindMoviesSave(saveMovies);
-        setMoviesByKeySave(saveMovies);
-        return
-      }
-      setSaveSearch(!saveSearch);
-    }
-  }
-
-  // Эффект при изменении ключевого слова
-  useEffect(() => {
-    if (location.pathname === '/movies') {
-      if (keyWord === '') {
-        setMovies([]);
-        setAllFindMovies([]);
-        setMoviesByKey([]);
-        setIsMoviesFound(false);
-        return;
-      }
-      setIsEmpty(false);
-    }
-    if (location.pathname === '/saved-movies') {
-      if (keyWordSave === '') {
-        setAllFindMoviesSave(saveMovies);
-        setMoviesByKeySave(saveMovies);
-        setIsMoviesFoundSave(true);
-        return;
-      }
-    }
-  }, [keyWord, keyWordSave])
-
-  // Эффект - фильтрация данных при получении списка фильмов
-  useEffect(() => {
-    if (location.pathname === '/movies') {
-      const movieKeyWordArray = filterKeyWord(movies, keyWord);
-      if (movieKeyWordArray.length === 0) {
-        setAllFindMovies([]);
-        return setIsMoviesFound(false);
-      }
-      setIsMoviesFound(true);
-      setAllFindMovies(movieKeyWordArray);
-      setMoviesByKey(movieKeyWordArray);
-      const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isChecked);
-      if (movieCheckboxArray.length > 0) {
-        setAllFindMovies(movieCheckboxArray);
-        setIsMoviesFound(true);
-      }
-      else {
-        setAllFindMovies([]);
-        setIsMoviesFound(false);
-      }
-    }
-    if (location.pathname === '/saved-movies') {
-      const movieKeyWordArray = filterKeyWord(saveMovies, keyWordSave);
-      if (movieKeyWordArray.length === 0) {
-        setAllFindMoviesSave([]);
-        //setIsMoviesFoundSave(false);
-      }
-      setIsMoviesFoundSave(true);
-      setAllFindMoviesSave(movieKeyWordArray);
-      setMoviesByKeySave(movieKeyWordArray);
-      const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isCheckedSave);
-      if (movieCheckboxArray.length > 0) {
-        setAllFindMoviesSave(movieCheckboxArray);
-        setIsMoviesFoundSave(true);
-      }
-      else {
-        setAllFindMoviesSave([]);
-        //setIsMoviesFoundSave(false);
-      }
-    }
-  }, [movies, isChecked, isCheckedSave, saveSearch])
-
-  useEffect(() => {
-    if (location.pathname === '/movies') {
-      const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
-      if (movieCheckboxArray.length > 0) {
-        setAllFindMovies(movieCheckboxArray);
-      }
-    }
-    if (location.pathname === '/saved-movies') {
-      const movieCheckboxArray = filterCheckBox(moviesByKeySave, isCheckedSave);
-      if (movieCheckboxArray.length > 0) {
-        setAllFindMoviesSave(movieCheckboxArray);
-      }
-    }
-  }, [])
 
   // Функция отображения сообщения об ошибке, полученной при запросе к API
   const displayErrorMessage = (err, msg) => {
@@ -260,23 +111,7 @@ function App() {
       });
   }
 
-  // Эффект при монтировании - проверка JWT-токена
-  useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      const jwt = localStorage.getItem('jwt');
-      if (!jwt) return;
-      mainApi.checkToken(jwt)
-        .then(res => {
-          if (res) {
-            setIsLogged(true);
-            const { name, email, _id } = res;
-            setUserData({ name, email, _id });
-            const url = location.pathname || '/movies';
-            navigate(url, true);
-          }
-        })
-    }
-  }, []);
+
 
   // Функция обновления данных пользователя через профиль
   const updateUser = (name, email) => {
@@ -296,6 +131,7 @@ function App() {
       });
   }
 
+  // Функция сброса данных в локальном хранилище
   const cleanCash = () => {
     setMovies([]);
     setAllFindMovies([]);
@@ -310,6 +146,24 @@ function App() {
     setKeyWordSave('');
     setMoviesByKeySave([]);
   }
+
+  // Эффект при монтировании - проверка JWT-токена
+  useEffect(() => {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      if (!jwt) return;
+      mainApi.checkToken(jwt)
+        .then(res => {
+          if (res) {
+            setIsLogged(true);
+            const { name, email, _id } = res;
+            setUserData({ name, email, _id });
+            const url = location.pathname || '/movies';
+            navigate(url, true);
+          }
+        })
+    }
+  }, []);
 
   return (
     <div className='app'>
@@ -345,11 +199,8 @@ function App() {
                 <ProtectedRouteElement
                   element={Movies}
                   isLogged={isLogged}
-                  movies={allFindMovies}
-                  handleChecked={handleChecked}
+                  movies={movies}
                   isChecked={isChecked}
-                  filterMovies={filterMoviesChange}
-                  filterMoviesSubmite={filterMoviesSubmite}
                   isMoviesFound={isMoviesFound}
                   isLoaderOpened={isLoaderOpened}
                   keyWord={keyWord}
@@ -359,6 +210,18 @@ function App() {
                   text={errorMessage}
                   errorDisplay={errorDisplay}
                   isServerCrash={isServerCrash}
+                  setIsChecked={setIsChecked}
+                  setKeyWord={setKeyWord}
+                  setIsEmpty={setIsEmpty}
+                  setMovies={setMovies}
+                  setAllFindMovies={setAllFindMovies}
+                  setMoviesByKey={setMoviesByKey}
+                  setIsLoaderOpened={setIsLoaderOpened}
+                  setIsServerCrash={setIsServerCrash}
+                  displayErrorMessage={displayErrorMessage}
+                  moviesByKey={moviesByKey}
+                  allFindMovies={allFindMovies}
+                  setIsMoviesFound={setIsMoviesFound}
                 />
               </>
             } />
@@ -372,15 +235,23 @@ function App() {
                 <ProtectedRouteElement
                   element={SavedMovies}
                   isLogged={isLogged}
-                  movies={allFindMoviesSave}
-                  isChecked={isCheckedSave}
-                  handleChecked={handleChecked}
-                  isMoviesFound={isMoviesFoundSave}
-                  filterMovies={filterMoviesChange}
-                  filterMoviesSubmite={filterMoviesSubmite}
-                  keyWord={keyWordSave}
+                  //   movies={allFindMoviesSave}
                   saveMovies={saveMovies}
                   setSaveMovies={setSaveMovies}
+                  isLiked={isLiked}
+                  handleLike={handleLike}
+                  isMoviesFoundSave={isMoviesFoundSave}
+                  setIsMoviesFoundSave={setIsMoviesFoundSave}
+                  allFindMoviesSave={allFindMoviesSave}
+                  setAllFindMoviesSave={setAllFindMoviesSave}
+                  keyWordSave={keyWordSave}
+                  setKeyWordSave={setKeyWordSave}
+                  moviesByKeySave={moviesByKeySave}
+                  setMoviesByKeySave={setMoviesByKeySave}
+                  saveSearch={saveSearch}
+                  setSaveSearch={setSaveSearch}
+                  isCheckedSave={isCheckedSave}
+                  setIsCheckedSave={setIsCheckedSave}
                 />
               </>
             } />

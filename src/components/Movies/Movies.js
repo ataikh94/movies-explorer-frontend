@@ -98,10 +98,14 @@ export default function Movies({
 
   // Эффект при монтировании - отрисовка фильмов с учётом чекбокса
   useEffect(() => {
-    setIsMoviesFound(true);
+    if (keyWord === '') {
+      setIsMoviesFound(true);
+    }
     const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
     if (movieCheckboxArray.length > 0) {
       setAllFindMovies(movieCheckboxArray);
+    } else {
+      setIsMoviesFound(false);
     }
   }, [])
 

@@ -57,14 +57,16 @@ export default function SavedMovies({
     setIsMoviesFoundSave(true);
     setAllFindMoviesSave(movieKeyWordArray);
     setMoviesByKeySave(movieKeyWordArray);
-    const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isCheckedSave);
-    if (movieCheckboxArray.length > 0) {
-      setAllFindMoviesSave(movieCheckboxArray);
-      setIsMoviesFoundSave(true);
-    }
-    else {
-      setAllFindMoviesSave([]);
-      setIsMoviesFoundSave(false);
+    if (isCheckedSave) {
+      const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isCheckedSave);
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMoviesSave(movieCheckboxArray);
+        setIsMoviesFoundSave(true);
+      }
+      else {
+        setAllFindMoviesSave([]);
+        setIsMoviesFoundSave(false);
+      }
     }
   }, [isCheckedSave, saveSearch, keyWordSave, saveMovies])
 
@@ -74,7 +76,7 @@ export default function SavedMovies({
       setAllFindMoviesSave(saveMovies);
     }
     if (keyWordSave === '') {
-     return setIsMoviesFoundSave(true);
+      return setIsMoviesFoundSave(true);
     }
     setIsMoviesFoundSave(true);
     const movieKeyWordArray = filterKeyWord(allFindMoviesSave, keyWordSave);
@@ -85,9 +87,11 @@ export default function SavedMovies({
     setIsMoviesFoundSave(true);
     setAllFindMoviesSave(movieKeyWordArray);
     setMoviesByKeySave(movieKeyWordArray);
-    const movieCheckboxArray = filterCheckBox(allFindMoviesSave, isCheckedSave);
-    if (movieCheckboxArray.length > 0) {
-      setAllFindMoviesSave(movieCheckboxArray);
+    if (isCheckedSave) {
+      const movieCheckboxArray = filterCheckBox(allFindMoviesSave, isCheckedSave);
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMoviesSave(movieCheckboxArray);
+      }
     }
   }, [])
 

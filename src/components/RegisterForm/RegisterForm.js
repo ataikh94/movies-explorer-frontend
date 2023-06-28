@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './RegisterForm.css';
-import Header from '../Header/Header';
+import logo from '../../images/logo.svg';
 
 export default function RegisterForm({
   formTitle,
@@ -21,7 +21,9 @@ export default function RegisterForm({
   return (
     <div className='form'>
       <div className='form__container'>
-        <Header classStyle='header-form' />
+      <Link to='/' className='form__logo-link'>
+            <img src={logo} alt='Логотип' className='form__logo' />
+          </Link>
         <h1 className='form__title'>{formTitle}</h1>
         <form name='register-form'
           className='register-form'

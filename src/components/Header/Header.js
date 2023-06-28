@@ -10,11 +10,7 @@ export default function Header({ isLogged, isMenuOpened, handleClick, closeMenu 
   const HeaderBlock = () => {
     if (location.pathname === '/signin' || location.pathname === '/signup') {
       return (
-        <header className='header header-form' >
-          <Link to='/' className='header__logo-link'>
-            <img src={logo} alt='Логотип' className='header__logo' />
-          </Link>
-        </header>
+        <header className='header header-form' ></header>
       )
     } else {
         return (

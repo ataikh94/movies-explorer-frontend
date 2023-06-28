@@ -9,6 +9,21 @@
     flex-direction: column;
 }
 
+.form__logo {
+    width: 38px;
+    margin: 0;
+}
+
+.form__logo:hover {
+    opacity: .7;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.form__logo-link {
+    cursor: auto;
+}
+
 .form__title {
     font-weight: 500;
     font-size: 24px;

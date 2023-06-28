@@ -229,6 +229,11 @@ function App() {
     <div className='app'>
       <div className='app__container'>
         <userContext.Provider value={userData}>
+          <Header
+            isLogged={isLogged}
+            isMenuOpened={isMenuOpened}
+            handleClick={handleClick}
+            closeMenu={closeMenu} />
           <Routes>
             <Route path='/signin'
               element={<Login
@@ -240,103 +245,74 @@ function App() {
                 handleRegister={handleRegister}
                 text={errorMessage}
                 errorDisplay={errorDisplay} />} />
-            <Route path='/' element={
-              <>
-                <Header
-                  isLogged={isLogged}
-                  isMenuOpened={isMenuOpened}
-                  handleClick={handleClick}
-                  closeMenu={closeMenu} />
-                <Main />
-              </>} />
+            <Route path='/' element={<Main />} />
             <Route path='/movies' element={
-              <>
-                <Header
-                  isLogged={isLogged}
-                  isMenuOpened={isMenuOpened}
-                  handleClick={handleClick}
-                  closeMenu={closeMenu} />
-                <ProtectedRouteElement
-                  element={Movies}
-                  isLogged={isLogged}
-                  movies={movies}
-                  isChecked={isChecked}
-                  isMoviesFound={isMoviesFound}
-                  isLoaderOpened={isLoaderOpened}
-                  keyWord={keyWord}
-                  isEmpty={isEmpty}
-                  handleLike={toggleLike}
-                  text={errorMessage}
-                  errorDisplay={errorDisplay}
-                  isServerCrash={isServerCrash}
-                  setIsChecked={setIsChecked}
-                  setKeyWord={setKeyWord}
-                  setIsEmpty={setIsEmpty}
-                  setMovies={setMovies}
-                  setAllFindMovies={setAllFindMovies}
-                  setMoviesByKey={setMoviesByKey}
-                  setIsLoaderOpened={setIsLoaderOpened}
-                  moviesByKey={moviesByKey}
-                  allFindMovies={allFindMovies}
-                  setIsMoviesFound={setIsMoviesFound}
-                  savedMovies={saveMovies}
-                  getMovies={getMovies}
-                />
-              </>
+              <ProtectedRouteElement
+                element={Movies}
+                isLogged={isLogged}
+                movies={movies}
+                isChecked={isChecked}
+                isMoviesFound={isMoviesFound}
+                isLoaderOpened={isLoaderOpened}
+                keyWord={keyWord}
+                isEmpty={isEmpty}
+                handleLike={toggleLike}
+                text={errorMessage}
+                errorDisplay={errorDisplay}
+                isServerCrash={isServerCrash}
+                setIsChecked={setIsChecked}
+                setKeyWord={setKeyWord}
+                setIsEmpty={setIsEmpty}
+                setMovies={setMovies}
+                setAllFindMovies={setAllFindMovies}
+                setMoviesByKey={setMoviesByKey}
+                setIsLoaderOpened={setIsLoaderOpened}
+                moviesByKey={moviesByKey}
+                allFindMovies={allFindMovies}
+                setIsMoviesFound={setIsMoviesFound}
+                savedMovies={saveMovies}
+                getMovies={getMovies}
+              />
             } />
             <Route path='/saved-movies' element={
-              <>
-                <Header
-                  isLogged={isLogged}
-                  isMenuOpened={isMenuOpened}
-                  handleClick={handleClick}
-                  closeMenu={closeMenu} />
-                <ProtectedRouteElement
-                  element={SavedMovies}
-                  isLogged={isLogged}
-                  saveMovies={saveMovies}
-                  setSaveMovies={setSaveMovies}
-                  handleLike={deleteSaveMovie}
-                  isMoviesFoundSave={isMoviesFoundSave}
-                  setIsMoviesFoundSave={setIsMoviesFoundSave}
-                  allFindMoviesSave={allFindMoviesSave}
-                  setAllFindMoviesSave={setAllFindMoviesSave}
-                  keyWordSave={keyWordSave}
-                  setKeyWordSave={setKeyWordSave}
-                  setMoviesByKeySave={setMoviesByKeySave}
-                  saveSearch={saveSearch}
-                  setSaveSearch={setSaveSearch}
-                  isCheckedSave={isCheckedSave}
-                  setIsCheckedSave={setIsCheckedSave}
-                  isSavedMovies={true}
-                  getSaveMovies={getSaveMovies}
-                />
-              </>
+              <ProtectedRouteElement
+                element={SavedMovies}
+                isLogged={isLogged}
+                saveMovies={saveMovies}
+                setSaveMovies={setSaveMovies}
+                handleLike={deleteSaveMovie}
+                isMoviesFoundSave={isMoviesFoundSave}
+                setIsMoviesFoundSave={setIsMoviesFoundSave}
+                allFindMoviesSave={allFindMoviesSave}
+                setAllFindMoviesSave={setAllFindMoviesSave}
+                keyWordSave={keyWordSave}
+                setKeyWordSave={setKeyWordSave}
+                setMoviesByKeySave={setMoviesByKeySave}
+                saveSearch={saveSearch}
+                setSaveSearch={setSaveSearch}
+                isCheckedSave={isCheckedSave}
+                setIsCheckedSave={setIsCheckedSave}
+                isSavedMovies={true}
+                getSaveMovies={getSaveMovies}
+              />
             } />
             <Route path='/profile' element={
-              <>
-                <Header
-                  isLogged={isLogged}
-                  isMenuOpened={isMenuOpened}
-                  handleClick={handleClick}
-                  closeMenu={closeMenu} />
-                <ProtectedRouteElement
-                  element={Profile}
-                  isLogged={isLogged}
-                  updateUser={updateUser}
-                  text={errorMessage}
-                  errorDisplay={errorDisplay}
-                  updateUserSuccess={updateUserSuccess}
-                  setIsLogged={setIsLogged}
-                  cleanCash={cleanCash}
-                />
-              </>
+              <ProtectedRouteElement
+                element={Profile}
+                isLogged={isLogged}
+                updateUser={updateUser}
+                text={errorMessage}
+                errorDisplay={errorDisplay}
+                updateUserSuccess={updateUserSuccess}
+                setIsLogged={setIsLogged}
+                cleanCash={cleanCash}
+              />
             } />
-            <Route path='*' element={<NotFoundPage />} />
-          </Routes>
-        </userContext.Provider>
-      </div>
+          <Route path='*' element={<NotFoundPage />} />
+        </Routes>
+      </userContext.Provider>
     </div>
+    </div >
   );
 }
 

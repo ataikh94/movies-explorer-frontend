@@ -13,7 +13,7 @@ export default function Profile({
   updateUserSuccess,
   setIsLogged }) {
 
-  const { values, errors, isValid, setIsValid, handleChange, setValue, setValues, setErrors } = useFormValidation();
+  const { values, errors, isValid, setIsValid, handleChange, setValue } = useFormValidation();
 
   const errorClassName = (name) => `profile-form__input-error ${errors[name] ? 'profile-form__input-error_active' : ''}`
 

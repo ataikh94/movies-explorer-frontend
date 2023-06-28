@@ -43,7 +43,6 @@ export default function Movies({
     if (e.target.value === '') {
       setIsEmpty(true);
     }
-    setIsMoviesFound(false);
   }
 
   // Функция сабмита поля поиска фильмов
@@ -66,37 +65,42 @@ export default function Movies({
       setMovies([]);
       setAllFindMovies([]);
       setMoviesByKey([]);
-      setIsMoviesFound(false);
       return;
     }
     setIsEmpty(false);
-
   }, [keyWord])
 
   // Эффект - фильтрация данных при получении списка фильмов
   useEffect(() => {
-    const movieKeyWordArray = filterKeyWord(movies, keyWord);
-    if (movieKeyWordArray.length === 0) {
-      setAllFindMovies([]);
-      return setIsMoviesFound(false);
-    }
-    setIsMoviesFound(true);
-    setAllFindMovies(movieKeyWordArray);
-    setMoviesByKey(movieKeyWordArray);
-    const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isChecked);
-    if (movieCheckboxArray.length > 0) {
-      setAllFindMovies(movieCheckboxArray);
+    if (keyWord === '') {
+      return setIsMoviesFound(true);
+    } else {
+      const movieKeyWordArray = filterKeyWord(movies, keyWord);
+      if (movieKeyWordArray.length === 0) {
+        setAllFindMovies([]);
+        return setIsMoviesFound(false);
+      }
       setIsMoviesFound(true);
+      setAllFindMovies(movieKeyWordArray);
+      setMoviesByKey(movieKeyWordArray);
+      const movieCheckboxArray = filterCheckBox(movieKeyWordArray, isChecked);
+      if (movieCheckboxArray.length > 0) {
+        setAllFindMovies(movieCheckboxArray);
+        setIsMoviesFound(true);
+      }
+      else {
+        setAllFindMovies([]);
+        setIsMoviesFound(false);
+      }
     }
-    else {
-      setAllFindMovies([]);
-      setIsMoviesFound(false);
-    }
-  }, [movies, isChecked, keyWord])
+  }, [movies, isChecked])
 
 
   // Эффект при монтировании - отрисовка фильмов с учётом чекбокса
   useEffect(() => {
+    if (keyWord === '') {
+      setIsMoviesFound(true);
+    }
     const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
     if (movieCheckboxArray.length > 0) {
       setAllFindMovies(movieCheckboxArray);

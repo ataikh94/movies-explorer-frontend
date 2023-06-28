@@ -8,20 +8,16 @@ export default function Header({ isLogged, isMenuOpened, handleClick, closeMenu 
   const location = useLocation();
 
   const HeaderBlock = () => {
-    if (location.pathname === '/signin' || location.pathname === '/signup') {
+    if (location.pathname === '/' || location.pathname === '/movies' || location.pathname === '/saved-movies' || location.pathname === '/profile') {
       return (
-        <header className='header header-form' ></header>
+        <header className={`header ${location.pathname === '' || location.pathname === '/' ? 'header-main' : ''}`}>
+          <Link to='/' className='header__logo-link'>
+            <img src={logo} alt='Логотип' className='header__logo' />
+          </Link>
+          <Navigation isLogged={isLogged} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu} />
+        </header >
       )
-    } else {
-        return (
-          <header className={`header ${location.pathname === '' || location.pathname === '/' ? 'header-main' : ''}`}>
-            <Link to='/' className='header__logo-link'>
-              <img src={logo} alt='Логотип' className='header__logo' />
-            </Link>
-            <Navigation isLogged={isLogged} isMenuOpened={isMenuOpened} handleClick={handleClick} closeMenu={closeMenu}/>
-          </header >
-        )
     }
   }
-    return <HeaderBlock />
+  return <HeaderBlock />
 }

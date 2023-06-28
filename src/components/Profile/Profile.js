@@ -11,7 +11,8 @@ export default function Profile({
   errorDisplay,
   cleanCash,
   updateUserSuccess,
-  setIsLogged }) {
+  setIsLogged,
+  isRequestInProgress }) {
 
   const { values, errors, isValid, setIsValid, handleChange, setValue } = useFormValidation();
 
@@ -72,6 +73,7 @@ export default function Profile({
                 title='Значение поля "Имя" может состоять из латинских или русских букв и содержать в себе пробел или символ "-"'
                 value={values['name'] ?? ''}
                 onChange={changeInputValue}
+                disabled={isRequestInProgress}
                 required />
             </div>
             <span className={errorClassName('name')}>{errors['name']}</span>
@@ -86,11 +88,14 @@ export default function Profile({
                 title='Значение в поле "E-mail" должно состоять только из цифр или латинских букв, а также может содержать символы "-", "_", "+", "%", "@" и ".".'
                 value={values['email'] ?? ''}
                 onChange={changeInputValue}
+                disabled={isRequestInProgress}
                 required />
             </div>
             <span className={errorClassName('email')}>{errors['email']}</span>
           </div>
-          <button className={`profile-form__submit-button ${isValid ? '' : 'profile-form__submit-button_disabled'}`} type='submit' disabled={!isValid}>Редактировать</button>
+          <button className={`profile-form__submit-button ${isValid ? '' : 'profile-form__submit-button_disabled'}`}
+            type='submit'
+            disabled={!isValid || isRequestInProgress}>Редактировать</button>
           <button className='profile-form__signout' onClick={singOut}>
             <Link to='/signin' className='profile-form__signout-link'>Выйти из аккаунта</Link>
           </button>

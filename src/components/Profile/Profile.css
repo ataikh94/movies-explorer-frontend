@@ -55,6 +55,11 @@
     margin-bottom: -1px;
     border-bottom: 1px solid #FF6838;
 }
+
+.profile-form__input:disabled{
+    background-color: transparent;
+}
+
 .profile-form__input-error {
     color: #EE3465;
     font-weight: 400;

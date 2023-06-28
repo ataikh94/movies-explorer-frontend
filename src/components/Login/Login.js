@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Login.css';
 import RegisterForm from '../RegisterForm/RegisterForm';
 import ServerMessage from '../ServerMessage/ServerMessage';
 import { useFormValidation } from '../../utils/useFormValidation';
 
-export default function Login({ handleLogin, text, errorDisplay }) {
+export default function Login({ handleLogin, text, errorDisplay, isRequestInProgress }) {
 
     const { values, errors, isValid, handleChange, setValue } = useFormValidation();
 
@@ -31,6 +31,7 @@ export default function Login({ handleLogin, text, errorDisplay }) {
                 setValue={setValue}
                 values={values}
                 errors={errors}
+                isRequestInProgress={isRequestInProgress}
             />
             <ServerMessage text={text} errorDisplay={errorDisplay} />
         </div>

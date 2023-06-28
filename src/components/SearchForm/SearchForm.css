@@ -42,6 +42,10 @@
     border-bottom: 1px solid #FF6838;
 }
 
+.search-form__input:disabled {
+    background-color: transparent;
+}
+
 .search-form__input-error {
     color: #EE3465;
     font-weight: 400;

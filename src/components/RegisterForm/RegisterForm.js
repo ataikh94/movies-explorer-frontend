@@ -15,6 +15,7 @@ export default function RegisterForm({
   errors,
   isValid,
   errorClassName,
+  isRequestInProgress,
   children
 }) {
 
@@ -42,6 +43,7 @@ export default function RegisterForm({
               pattern='^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,3}$'
               title='Значение в поле "E-mail" должно состоять только из цифр или латинских букв, а также может содержать символы "-", "_", "+", "%", "@" и ".".'
               value={values['email'] ?? ''}
+              disabled={isRequestInProgress}
               required />
             <span className={errorClassName('email')}>{errors['email']}</span>
             <label className='register-form__input-title' htmlFor='passwordRegisterForm'>Пароль</label>
@@ -53,11 +55,14 @@ export default function RegisterForm({
               autoComplete='off'
               onChange={handleChange}
               value={values['password'] ?? ''}
+              disabled={isRequestInProgress}
               required />
             <span className={errorClassName('password')}>{errors['password']}</span>
           </div>
           <div className='register-form__element-group'>
-            <button className={`register-form__submit-button ${isValid ? '' : 'register-form__submit-button_disabled'}`} type='submit' disabled={!isValid}>{btnName}</button>
+            <button className={`register-form__submit-button ${(isValid || !isRequestInProgress) ? '' : 'register-form__submit-button_disabled'}`}
+              type='submit'
+              disabled={!isValid || isRequestInProgress}>{btnName}</button>
             <span className='register-form__span'>{`${formDescription} `}
               <Link to={btnPath} className='register-form__span-link'>{btnRoute}</Link>
             </span>

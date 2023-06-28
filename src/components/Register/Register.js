@@ -4,7 +4,7 @@ import RegisterForm from '../RegisterForm/RegisterForm';
 import { useFormValidation } from '../../utils/useFormValidation';
 import ServerMessage from '../ServerMessage/ServerMessage';
 
-export default function Register({ handleRegister, text, errorDisplay }) {
+export default function Register({ handleRegister, text, errorDisplay, isRequestInProgress }) {
 
     const { values, errors, isValid, handleChange, setValue } = useFormValidation();
     const errorClassName = (name) => `register-form__input-error ${errors[name] ? 'register-form__input-error_active' : ''}`
@@ -30,6 +30,7 @@ export default function Register({ handleRegister, text, errorDisplay }) {
                 isValid={isValid}
                 setValue={setValue}
                 errorClassName={errorClassName}
+                isRequestInProgress={isRequestInProgress}
                 >
                 <label className='register-form__input-title' htmlFor='nameRegisterForm'>Имя</label>
                 <input type='text'
@@ -43,7 +44,8 @@ export default function Register({ handleRegister, text, errorDisplay }) {
                     onChange={handleChange}
                     pattern='(^[А-Яа-яЁё\s\-]+$)|(^[A-Za-z\s\-]+$)'
                     title='Значение поля "Имя" может состоять из латинских или русских букв и содержать в себе пробел или символ "-"'
-                    required />
+                    required
+                    disabled={isRequestInProgress} />
                 <span className={errorClassName('name')}>{errors['name']}</span>
             </RegisterForm>
             <ServerMessage text={text} errorDisplay={errorDisplay} />

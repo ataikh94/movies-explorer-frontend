@@ -28,6 +28,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(''); // текст сообщения об ошибке при получении данных из API
   const [errorDisplay, setErrorDisplay] = useState(false); // состояние отображения ошибки при получении данных из API
   const [updateUserSuccess, setUpdateUserSuccess] = useState(false); // состояние успешного обновления данных пользователя для дополнительного класса
+  const [isRequestInProgress, setIsRequestInProgress] = useState(false); // состояние запроса к API
 
   //Переменные для страницы movies
   const [movies, setMovies] = useLocalStorage('allMovies', []); // состояние массива фильмов, полученных из API
@@ -80,17 +81,21 @@ function App() {
 
   // Функция регистрации
   const handleRegister = (name, email, password) => {
+    setIsRequestInProgress(true);
     mainApi.register(name, email, password)
       .then(res => {
         handleLogin(email, password);
+        setIsRequestInProgress(false);
       })
       .catch(err => {
+        setIsRequestInProgress(false);
         displayErrorMessage(err);
       });
   }
 
   // Функция авторизации
   const handleLogin = (email, password) => {
+    setIsRequestInProgress(true);
     mainApi.authorize(email, password)
       .then(res => {
         if (res.token) {
@@ -99,15 +104,18 @@ function App() {
           const { name, email, _id } = res.userObj;
           setUserData({ name, email, _id });
           navigate('/movies', true);
+          setIsRequestInProgress(false);
         }
       })
       .catch(err => {
+        setIsRequestInProgress(false);
         displayErrorMessage(err);
       });
   }
 
   // Функция обновления данных пользователя через профиль
   const updateUser = (name, email) => {
+    setIsRequestInProgress(true);
     mainApi.updateUser(name, email)
       .then(res => {
         setErrorMessage('Данные изменены');
@@ -118,8 +126,10 @@ function App() {
           setErrorMessage(false);
           setUpdateUserSuccess(false);
         }, 2000);
+        setIsRequestInProgress(false);
       })
       .catch(err => {
+        setIsRequestInProgress(false);
         displayErrorMessage(err);
       });
   }
@@ -175,7 +185,8 @@ function App() {
   }
 
   // Функция получения фильмов из стороннего API и обработка записей
-  const getMovies = () => {
+  const getMovies = (e) => {
+    setIsRequestInProgress(true);
     moviesApi.arrayMovies()
       .then(data => {
         const updatedArray = data.map(object => {
@@ -192,11 +203,13 @@ function App() {
       .then(data => {
         setMovies(data);
         setIsLoaderOpened(false);
+        setIsRequestInProgress(false);
       })
       .catch(err => {
         setIsLoaderOpened(false);
         setIsMoviesFound(false);
         setIsServerCrash(true);
+        setIsRequestInProgress(false);
         displayErrorMessage(err, 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
       });
   }
@@ -241,14 +254,16 @@ function App() {
                 <Login
                   handleLogin={handleLogin}
                   text={errorMessage}
-                  errorDisplay={errorDisplay} />} />
+                  errorDisplay={errorDisplay}
+                  isRequestInProgress={isRequestInProgress} />} />
             <Route path='/signup'
               element={isLogged ?
                 <Navigate to='/' /> :
                 <Register
                   handleRegister={handleRegister}
                   text={errorMessage}
-                  errorDisplay={errorDisplay} />} />
+                  errorDisplay={errorDisplay}
+                  isRequestInProgress={isRequestInProgress} />} />
             <Route path='/' element={<Main />} />
             <Route path='/movies' element={
               <ProtectedRouteElement
@@ -276,6 +291,7 @@ function App() {
                 setIsMoviesFound={setIsMoviesFound}
                 savedMovies={saveMovies}
                 getMovies={getMovies}
+                isRequestInProgress={isRequestInProgress}
               />
             } />
             <Route path='/saved-movies' element={
@@ -298,6 +314,7 @@ function App() {
                 setIsCheckedSave={setIsCheckedSave}
                 isSavedMovies={true}
                 getSaveMovies={getSaveMovies}
+                isRequestInProgress={isRequestInProgress}
               />
             } />
             <Route path='/profile' element={
@@ -310,6 +327,7 @@ function App() {
                 updateUserSuccess={updateUserSuccess}
                 setIsLogged={setIsLogged}
                 cleanCash={cleanCash}
+                isRequestInProgress={isRequestInProgress}
               />
             } />
             <Route path='*' element={<NotFoundPage />} />

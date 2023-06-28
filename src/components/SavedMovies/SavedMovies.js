@@ -7,7 +7,6 @@ import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
 
 export default function SavedMovies({
   saveMovies,
-  setSaveMovies,
   handleLike,
   isMoviesFoundSave,
   setIsMoviesFoundSave,
@@ -21,7 +20,7 @@ export default function SavedMovies({
   isCheckedSave,
   setIsCheckedSave,
   isSavedMovies,
-  getSaveMovies
+  isRequestInProgress
 }) {
 
   // Функция изменения состояния чекбокса
@@ -93,7 +92,8 @@ export default function SavedMovies({
           handleChecked={handleChecked}
           filterMovies={filterMoviesChange}
           filterMoviesSubmite={filterMoviesSubmite}
-          keyWord={keyWordSave} />
+          keyWord={keyWordSave}
+          isRequestInProgress={isRequestInProgress} />
         <MoviesCardList movies={allFindMoviesSave} savedMovies={saveMovies} isChecked={isCheckedSave} isMoviesFound={isMoviesFoundSave}
           handleLike={handleLike} isSavedMovies={isSavedMovies}/>
       </main>

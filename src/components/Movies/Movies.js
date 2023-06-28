@@ -29,7 +29,8 @@ export default function Movies({
   allFindMovies,
   setIsMoviesFound,
   savedMovies,
-  getMovies
+  getMovies,
+  isRequestInProgress
 }) {
 
   // Функция изменения чекбокса
@@ -56,7 +57,7 @@ export default function Movies({
       return;
     }
     setIsLoaderOpened(true);
-    getMovies();
+    getMovies(e);
   }
 
   // Эффект при изменении ключевого слова
@@ -95,7 +96,6 @@ export default function Movies({
     }
   }, [movies, isChecked])
 
-
   // Эффект при монтировании - отрисовка фильмов с учётом чекбокса
   useEffect(() => {
     if (keyWord === '') {
@@ -116,7 +116,8 @@ export default function Movies({
           handleChecked={handleChecked}
           isChecked={isChecked}
           filterMovies={filterMoviesChange}
-          filterMoviesSubmite={filterMoviesSubmite} />
+          filterMoviesSubmite={filterMoviesSubmite} 
+          isRequestInProgress={isRequestInProgress}/>
         {isLoaderOpened ?
           <Preloader isLoaderOpened={isLoaderOpened} /> :
           errorDisplay ?

@@ -13,7 +13,7 @@ export default function Profile({
   updateUserSuccess,
   setIsLogged }) {
 
-  const { values, errors, isValid, handleChange, setValue } = useFormValidation();
+  const { values, errors, isValid, setIsValid, handleChange, setValue, setValues, setErrors } = useFormValidation();
 
   const errorClassName = (name) => `profile-form__input-error ${errors[name] ? 'profile-form__input-error_active' : ''}`
 
@@ -32,6 +32,16 @@ export default function Profile({
     const name = values['name'];
     const email = values['email'];
     updateUser(name, email);
+  }
+
+  const changeInputValue = (e) => {
+    const { form } = e.target;
+    handleChange(e);
+    if (e.target.value === currentUser.name || e.target.value === currentUser.email) {
+      setIsValid(false);
+    } else {
+      setIsValid(form.checkValidity())
+    }
   }
 
   const singOut = () => {
@@ -61,7 +71,7 @@ export default function Profile({
                 pattern='(^[А-Яа-яЁё\s\-]+$)|(^[A-Za-z\s\-]+$)'
                 title='Значение поля "Имя" может состоять из латинских или русских букв и содержать в себе пробел или символ "-"'
                 value={values['name'] ?? ''}
-                onChange={handleChange}
+                onChange={changeInputValue}
                 required />
             </div>
             <span className={errorClassName('name')}>{errors['name']}</span>
@@ -75,7 +85,7 @@ export default function Profile({
                 pattern='^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,3}$'
                 title='Значение в поле "E-mail" должно состоять только из цифр или латинских букв, а также может содержать символы "-", "_", "+", "%", "@" и ".".'
                 value={values['email'] ?? ''}
-                onChange={handleChange}
+                onChange={changeInputValue}
                 required />
             </div>
             <span className={errorClassName('email')}>{errors['email']}</span>

@@ -72,7 +72,15 @@ export default function SavedMovies({
     if (!allFindMoviesSave) {
       setAllFindMoviesSave(saveMovies);
     }
-    const movieCheckboxArray = filterCheckBox(saveMovies, isCheckedSave);
+    const movieKeyWordArray = filterKeyWord(allFindMoviesSave, keyWordSave);
+      if (movieKeyWordArray.length === 0) {
+        setAllFindMoviesSave([]);
+        return setIsMoviesFoundSave(false);
+      }
+      setIsMoviesFoundSave(true);
+      setAllFindMoviesSave(movieKeyWordArray);
+      setMoviesByKeySave(movieKeyWordArray);
+    const movieCheckboxArray = filterCheckBox(allFindMoviesSave, isCheckedSave);
     if (movieCheckboxArray.length > 0) {
       setAllFindMoviesSave(movieCheckboxArray);
     }

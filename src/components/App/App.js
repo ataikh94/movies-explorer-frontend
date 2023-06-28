@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import './App.css';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -236,15 +236,19 @@ function App() {
             closeMenu={closeMenu} />
           <Routes>
             <Route path='/signin'
-              element={<Login
-                handleLogin={handleLogin}
-                text={errorMessage}
-                errorDisplay={errorDisplay} />} />
+              element={isLogged ?
+                <Navigate to='/' replace /> :
+                <Login
+                  handleLogin={handleLogin}
+                  text={errorMessage}
+                  errorDisplay={errorDisplay} />} />
             <Route path='/signup'
-              element={<Register
-                handleRegister={handleRegister}
-                text={errorMessage}
-                errorDisplay={errorDisplay} />} />
+              element={isLogged ?
+                <Navigate to='/' replace /> :
+                <Register
+                  handleRegister={handleRegister}
+                  text={errorMessage}
+                  errorDisplay={errorDisplay} />} />
             <Route path='/' element={<Main />} />
             <Route path='/movies' element={
               <ProtectedRouteElement
@@ -308,10 +312,10 @@ function App() {
                 cleanCash={cleanCash}
               />
             } />
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
-      </userContext.Provider>
-    </div>
+            <Route path='*' element={<NotFoundPage />} />
+          </Routes>
+        </userContext.Provider>
+      </div>
     </div >
   );
 }

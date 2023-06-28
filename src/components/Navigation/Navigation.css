@@ -62,8 +62,8 @@
     font-weight: 400;
 }
 
-.navigation__link:focus {
-    font-weight: 900;
+.navigation__link_active {
+    font-weight: 500;
 }
 
 .navigation__link:last-child {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './Navigation.css';
 import Menu from '../Menu/Menu';
 import AccountButon from '../AccountButon/AccountButon';
@@ -14,8 +14,8 @@ export default function Navigation({ isLogged, isMenuOpened, handleClick, closeM
       </div>
       <div className={`navigation buttons-authorized ${isLogged ? 'buttons-authorized_opened' : ''}`}>
         <nav className='navigation__buttons-group'>
-          <Link to='/movies' className='navigation__link'>Фильмы</Link>
-          <Link to='/saved-movies' className='navigation__link'>Сохраненные фильмы</Link>
+          <NavLink to='/movies' className={({ isActive }) =>`navigation__link ${isActive ? 'navigation__link_active' : ''}`}>Фильмы</NavLink>
+          <NavLink to='/saved-movies' className={({ isActive }) =>`navigation__link ${isActive ? 'navigation__link_active' : ''}`}>Сохраненные фильмы</NavLink>
         </nav>
         <AccountButon />
         <button className='navigation__burger' onClick={handleClick}>

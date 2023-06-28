@@ -46,6 +46,9 @@ export default function SavedMovies({
 
   // Эффект - фильтрация данных при получении списка фильмов
   useEffect(() => {
+    if (keyWordSave === '') {
+      setIsMoviesFoundSave(true);
+    }
     const movieKeyWordArray = filterKeyWord(saveMovies, keyWordSave);
     if (movieKeyWordArray.length === 0) {
       setAllFindMoviesSave([]);
@@ -70,14 +73,18 @@ export default function SavedMovies({
     if (!allFindMoviesSave) {
       setAllFindMoviesSave(saveMovies);
     }
+    if (keyWordSave === '') {
+     return setIsMoviesFoundSave(true);
+    }
+    setIsMoviesFoundSave(true);
     const movieKeyWordArray = filterKeyWord(allFindMoviesSave, keyWordSave);
-      if (movieKeyWordArray.length === 0) {
-        setAllFindMoviesSave([]);
-        return setIsMoviesFoundSave(false);
-      }
-      setIsMoviesFoundSave(true);
-      setAllFindMoviesSave(movieKeyWordArray);
-      setMoviesByKeySave(movieKeyWordArray);
+    if (movieKeyWordArray.length === 0) {
+      setAllFindMoviesSave([]);
+      return setIsMoviesFoundSave(false);
+    }
+    setIsMoviesFoundSave(true);
+    setAllFindMoviesSave(movieKeyWordArray);
+    setMoviesByKeySave(movieKeyWordArray);
     const movieCheckboxArray = filterCheckBox(allFindMoviesSave, isCheckedSave);
     if (movieCheckboxArray.length > 0) {
       setAllFindMoviesSave(movieCheckboxArray);
@@ -95,7 +102,7 @@ export default function SavedMovies({
           keyWord={keyWordSave}
           isRequestInProgress={isRequestInProgress} />
         <MoviesCardList movies={allFindMoviesSave} savedMovies={saveMovies} isChecked={isCheckedSave} isMoviesFound={isMoviesFoundSave}
-          handleLike={handleLike} isSavedMovies={isSavedMovies}/>
+          handleLike={handleLike} isSavedMovies={isSavedMovies} />
       </main>
       <Footer />
     </>

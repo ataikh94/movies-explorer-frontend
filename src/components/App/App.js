@@ -43,12 +43,12 @@ function App() {
 
   //Переменные для страницы saved-movies
   const [saveMovies, setSaveMovies] = useLocalStorage('allMovies-save', []); // состояние массива сохраненных фильмов
-  const [isMoviesFoundSave, setIsMoviesFoundSave] = useLocalStorage('movies-found-save', true); // состояние результата поиска сохраненных фильмов
-  const [allFindMoviesSave, setAllFindMoviesSave] = useLocalStorage('save-movies', []); // состояние массива сохраненных фильмов, найденных с учетом всех фильтров
-  const [keyWordSave, setKeyWordSave] = useLocalStorage('keyword-save', ''); // состояние ключевого слова для сохраненных фильмов
-  const [moviesByKeySave, setMoviesByKeySave] = useLocalStorage('movies-by-key-save', allFindMoviesSave); //состояние массива сохраненных фильмов, найденных с учетом ключевого слова
+  const [isMoviesFoundSave, setIsMoviesFoundSave] = useState(true); // состояние результата поиска сохраненных фильмов
+  const [allFindMoviesSave, setAllFindMoviesSave] = useState([]); // состояние массива сохраненных фильмов, найденных с учетом всех фильтров
+  const [keyWordSave, setKeyWordSave] = useState(''); // состояние ключевого слова для сохраненных фильмов
+  const [moviesByKeySave, setMoviesByKeySave] = useState(allFindMoviesSave); //состояние массива сохраненных фильмов, найденных с учетом ключевого слова
   const [saveSearch, setSaveSearch] = useState(false); // состояние поиска сохраненных фильмов
-  const [isCheckedSave, setIsCheckedSave] = useLocalStorage('checked-save', false); // состояние чекбокса на странице сохраненных фильмов
+  const [isCheckedSave, setIsCheckedSave] = useState(false); // состояние чекбокса на странице сохраненных фильмов
 
   const navigate = useNavigate();
   const location = useLocation();

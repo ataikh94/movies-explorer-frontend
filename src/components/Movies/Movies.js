@@ -40,10 +40,10 @@ export default function Movies({
 
   // Функция изменения поля поиска фильмов
   const filterMoviesChange = (e) => {
-    setKeyWord(e.target.value.toLowerCase());
     if (e.target.value === '') {
       setIsEmpty(true);
     }
+    setKeyWord(e.target.value);
   }
 
   // Функция сабмита поля поиска фильмов
@@ -98,9 +98,7 @@ export default function Movies({
 
   // Эффект при монтировании - отрисовка фильмов с учётом чекбокса
   useEffect(() => {
-    if (keyWord === '') {
-      setIsMoviesFound(true);
-    }
+    setIsMoviesFound(true);
     const movieCheckboxArray = filterCheckBox(moviesByKey, isChecked);
     if (movieCheckboxArray.length > 0) {
       setAllFindMovies(movieCheckboxArray);
@@ -116,8 +114,8 @@ export default function Movies({
           handleChecked={handleChecked}
           isChecked={isChecked}
           filterMovies={filterMoviesChange}
-          filterMoviesSubmite={filterMoviesSubmite} 
-          isRequestInProgress={isRequestInProgress}/>
+          filterMoviesSubmite={filterMoviesSubmite}
+          isRequestInProgress={isRequestInProgress} />
         {isLoaderOpened ?
           <Preloader isLoaderOpened={isLoaderOpened} /> :
           errorDisplay ?

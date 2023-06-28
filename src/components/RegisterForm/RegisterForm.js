@@ -16,14 +16,14 @@ export default function RegisterForm({
   isValid,
   errorClassName,
   children
- }) {
+}) {
 
   return (
     <div className='form'>
       <div className='form__container'>
-      <Link to='/' className='form__logo-link'>
-            <img src={logo} alt='Логотип' className='form__logo' />
-          </Link>
+        <Link to='/' className='form__logo-link'>
+          <img src={logo} alt='Логотип' className='form__logo' />
+        </Link>
         <h1 className='form__title'>{formTitle}</h1>
         <form name='register-form'
           className='register-form'
@@ -39,6 +39,7 @@ export default function RegisterForm({
               placeholder='Email'
               autoComplete='off'
               onChange={handleChange}
+              pattern='^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,3}$'
               title='Значение в поле "E-mail" должно состоять только из цифр или латинских букв, а также может содержать символы "-", "_", "+", "%", "@" и ".".'
               value={values['email'] ?? ''}
               required />

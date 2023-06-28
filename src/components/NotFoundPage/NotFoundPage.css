@@ -30,6 +30,8 @@
     color: #FF6838;
     text-decoration: none;
     margin: 0;
+    border: none;
+    background-color: transparent;
 }
 
 .not-found-page__link:hover {

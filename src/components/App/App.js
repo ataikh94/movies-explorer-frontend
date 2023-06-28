@@ -237,14 +237,14 @@ function App() {
           <Routes>
             <Route path='/signin'
               element={isLogged ?
-                <Navigate to='/' replace /> :
+                <Navigate to='/' /> :
                 <Login
                   handleLogin={handleLogin}
                   text={errorMessage}
                   errorDisplay={errorDisplay} />} />
             <Route path='/signup'
               element={isLogged ?
-                <Navigate to='/' replace /> :
+                <Navigate to='/' /> :
                 <Register
                   handleRegister={handleRegister}
                   text={errorMessage}

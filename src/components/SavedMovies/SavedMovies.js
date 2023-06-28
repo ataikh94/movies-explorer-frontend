@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import './SavedMovies.css';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
-import * as mainApi from '../../utils/MainApi';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import { filterCheckBox, filterKeyWord } from '../../utils/filterMovies';
 

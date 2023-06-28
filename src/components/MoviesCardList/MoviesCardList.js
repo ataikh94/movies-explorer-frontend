@@ -11,20 +11,27 @@ export default function MoviesCardList({
   isSavedMovies,
   deleteSaveMovie
 }) {
+  // Переменные констант
+  const initialCountMoviesOnBigScreen = 7; // количество фильмов, отображаемое при поиске на большом экране ()
+  const initialCountMoviesOnSmallScreen = 5; // количество фильмов, отображаемое при поиске на маленьком экране ()
+  const addedCountMoviesOnBigScreen = 7;// количество фильмов, добавляемое при нажатии кнопки "Еще" на большом экране ()
+  const addedCountMoviesOnSmallScreen = 5;// количество фильмов, добавляемое при нажатии кнопки "Еще" на маленьком экране ()
+  const pointOfChangeCountMovies = 550// точка перестроения экрана
+
   const [isHidden, setIsHidden] = useState(false); // состояние кнопки "Ещё"
-  const [countVisibleItems, setCountVisibleItems] = useState(7); // первоначальное количество отображаемых элементов
+  const [countVisibleItems, setCountVisibleItems] = useState(initialCountMoviesOnBigScreen); // первоначальное количество отображаемых элементов
   const visibleItems = movies.slice(0, countVisibleItems); // массив элементов с учётом ограничения
 
   // Функция клика по кнопке "Ещё"
   const handleClick = () => {
-    window.innerWidth <= 550 ?
-      setCountVisibleItems(countVisibleItems + 5) :
-      setCountVisibleItems(countVisibleItems + 7);
+    window.innerWidth <= pointOfChangeCountMovies ?
+      setCountVisibleItems(countVisibleItems + addedCountMoviesOnSmallScreen) :
+      setCountVisibleItems(countVisibleItems + addedCountMoviesOnBigScreen);
   }
- 
+
   // Функция учёта размера экрана устройства
   const windowSizeControl = () => {
-    window.innerWidth <= 550 ? setCountVisibleItems(5) : setCountVisibleItems(7);
+    window.innerWidth <= pointOfChangeCountMovies ? setCountVisibleItems(initialCountMoviesOnSmallScreen) : setCountVisibleItems(initialCountMoviesOnBigScreen);
   }
 
   // Подписка на изменение размера экрана
@@ -32,7 +39,7 @@ export default function MoviesCardList({
 
   // Эффект при изменении чекбокса - устанавливать первоначальное количество отображаемых записей
   useEffect(() => {
-    setCountVisibleItems(7);
+    windowSizeControl();
   }, [isChecked])
 
   // Эффект при изменении количества отображаемых записей - скрыть кнопку "Ещё"

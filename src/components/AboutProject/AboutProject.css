@@ -1,0 +1,135 @@
+.about-project {
+    padding: 110px 70px;
+    background-color: white;
+    margin: 0;
+}
+
+.about-project__description {
+    margin: 70px 0 0;
+    display: flex;
+    gap: 40px;
+}
+
+.description__title {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0 0 26px;
+    letter-spacing: -.8px;
+}
+
+.description__text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    max-width: 550px;
+}
+
+.grid {
+    margin: 110px 0 0;
+    display: grid;
+    grid-template-columns: minmax(100px, 228px) minmax(184px, 912px);
+    text-align: center;
+}
+
+.grid__label {
+    text-align: center;
+    padding: 9px 14px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.grid__label-green {
+    background-color: #2BE080;
+}
+
+.grid__label-gray {
+    background-color: #F2F2F2;
+}
+
+.grid__sign {
+    margin: 14px 0 0;
+    color: #A0A0A0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+}
+
+@media screen and (max-width: 950px) {
+    .about-project {
+        padding: 90px 50px;
+    }
+
+    .about-project__description {
+        gap: 30px;
+        justify-content: center;
+    }
+
+    .description__title {
+        margin: 0 0 22px;
+        max-width: 319px;
+    }
+
+    .description__text {
+        font-size: 12px;
+        line-height: 18px;
+        max-width: 319px;
+    }
+
+    .grid {
+        margin: 93px 0 0;
+        grid-template-columns: minmax(100px, 140px) minmax(184px, 528px);
+        justify-content: center;
+    }
+
+    .grid__label {
+        padding: 10px;
+    }
+
+    .grid__sign {
+        font-weight: 400;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .about-project {
+        padding: 70px 18px;
+    }
+
+    .about-project__description {
+        margin: 60px 0 0;
+        flex-direction: column;
+        gap: 56px;
+    }
+
+    .description__title {
+        font-size: 18px;
+        line-height: 22px;
+        margin: 0 0 16px;
+        letter-spacing: -.7px;
+    }
+
+    .description__text {
+        font-size: 11px;
+        line-height: 16px;
+        max-width: 100%;
+    }
+
+    .grid {
+        margin: 60px 0 0;
+    }
+
+    .grid__label {
+        font-size: 11px;
+        line-height: 13px;
+        padding: 11px 10px;
+    }
+
+    .grid__sign {
+        margin: 10px 0 0;
+        font-size: 11px;
+        line-height: 13px;
+    }
+}

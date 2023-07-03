@@ -1,0 +1,124 @@
+.buttons-unauthorized {
+    display: none;
+    margin: 0;
+}
+
+.buttons-unauthorized_opened {
+    display: block;
+}
+
+.buttons-authorized {
+    display: none;
+}
+
+.buttons-authorized_opened {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 65%;
+}
+
+.navigation__button {
+    margin-left: 30px;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    color: white;
+}
+
+.navigation__button:first-child {
+    margin-left: 0;
+}
+
+.navigation__button:hover {
+    opacity: .7;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.navigation__buttons-signin {
+    color: black;
+    padding: 8px 20px;
+    box-sizing: border-box;
+    background-color: #2BE080;
+    border-radius: 3px;
+}
+
+.navigation__buttons-signin:hover {
+    opacity: .8;
+}
+
+.navigation__buttons-group {
+    margin-left: 66px;
+}
+
+.navigation__link {
+    text-decoration: none;
+    color: black;
+    margin: 0 16px 0 0;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 400;
+}
+
+.navigation__link_active {
+    font-weight: 500;
+}
+
+.navigation__link:last-child {
+    margin: 0;
+}
+
+.navigation__link:hover {
+    opacity: .7;
+    cursor: pointer;
+    transition: .3s ease-out;
+}
+
+.navigation__burger {
+    display: none;
+    background-color: transparent;
+    border: none;
+}
+
+.navigation__burger-button {
+    width: 44px;
+}
+
+.navigation__burger-button:hover {
+    opacity: .8;
+    cursor: pointer;
+    transition: .3s ease-out;
+}
+
+@media screen and (max-width: 900px) {
+
+    .navigation__buttons-unauthorized {
+        padding-bottom: 6px;
+    }
+
+    .navigation__link {
+        display: none;
+    }
+
+    .navigation__burger {
+        display: block;
+    }
+
+    .navigation__burger-button {
+        width: 40px;
+        height: 43px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .navigation__button {
+        font-size: 10px;
+        margin-left: 14px;
+    }
+
+    .navigation__buttons-signin {
+        padding: 7px 12px;
+    }
+}

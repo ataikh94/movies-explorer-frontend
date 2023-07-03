@@ -43,7 +43,7 @@ export default function Movies({
     if (e.target.value === '') {
       setIsEmpty(true);
     }
-    setKeyWord(e.target.value);
+    setKeyWord(e.target.value.toLowerCase());
   }
 
   // Функция сабмита поля поиска фильмов

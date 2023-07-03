@@ -78,9 +78,9 @@
 }
 
 
-@media screen and (max-width: 900px) and (max-height: 930px) and (min-height: 700px) {
+@media screen and (max-width: 900px) {
     .menu__elements  {
-        padding-bottom: 400px;
+        padding-bottom: 300px;
     }
 }
 
@@ -94,6 +94,12 @@
     .menu__container {
         width: 100%;
         margin-top: 0;
+        padding-bottom: 250px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .menu__container {
         padding-bottom: 438px;
     }
 
